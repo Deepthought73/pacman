@@ -23,8 +23,8 @@ suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"
         position(256, 256)
     }
 
-	while (true) {
-		image.tween(image::rotation[minDegrees], time = 1.seconds, easing = Easing.LINEAR)
+    while (true) {
+        image.tween(image::rotation[minDegrees], time = 1.seconds, easing = Easing.LINEAR)
         minDegrees = (minDegrees.degrees - 20).degrees
-	}
+    }
 }
