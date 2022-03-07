@@ -2,10 +2,7 @@ import com.soywiz.klock.seconds
 import com.soywiz.korge.Korge
 import com.soywiz.korge.tween.get
 import com.soywiz.korge.tween.tween
-import com.soywiz.korge.view.anchor
-import com.soywiz.korge.view.image
-import com.soywiz.korge.view.position
-import com.soywiz.korge.view.scale
+import com.soywiz.korge.view.*
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
@@ -13,6 +10,11 @@ import com.soywiz.korma.geom.degrees
 import com.soywiz.korma.interpolation.Easing
 
 suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"]) {
+    val emptyGameBoardSprite = image(resourcesVfs["gameboard.png"].readBitmap())
+
+
+
+
     var minDegrees = (-16).degrees
     val maxDegrees = (+16).degrees
 
