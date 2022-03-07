@@ -1,5 +1,7 @@
 import com.soywiz.korge.Korge
+import com.soywiz.korge.view.anchor
 import com.soywiz.korge.view.image
+import com.soywiz.korge.view.position
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
@@ -9,7 +11,11 @@ suspend fun main() = Korge(width = 224, height = 248, bgcolor = Colors["#000000"
     val emptyGameBoardBitmap = resourcesVfs["gameboard.png"].readBitmap()
     val gameBoard = GameBoard(emptyGameBoardBitmap)
 
-    image(emptyGameBoardBitmap)
+    image(emptyGameBoardBitmap) {
+        anchor(.0, .0)
+        scale = 1.0
+        position(0, 0)
+    }
 
     /*
     var minDegrees = (-16).degrees
