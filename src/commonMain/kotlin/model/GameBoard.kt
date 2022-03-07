@@ -7,22 +7,22 @@ class GameBoard(emptySpriteMap: Bitmap) {
 
     private val gameMap = Array(62) { row ->
         Array(56) { col ->
-            var isObstacle = false
+            var pixelCount = 0
             for (y in row * 4 until row * 4 + 4) {
                 for (x in col * 4 until col * 4 + 4) {
                     if (emptySpriteMap.getRgba(x, y) != RGBA(0, 0, 0)) {
-                        isObstacle = true
+                        pixelCount++
                     }
                 }
             }
-            isObstacle
+            pixelCount > 1
         }
     }
 
     init {
-        for (i in gameMap[0].indices) {
-            for (j in gameMap.indices) {
-                print(if (gameMap[j][i]) "1" else "0")
+        for (i in gameMap.indices) {
+            for (j in gameMap[0].indices) {
+                print(if (gameMap[i][j]) "1" else " ")
             }
             println()
         }
