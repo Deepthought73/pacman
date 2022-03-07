@@ -22,7 +22,7 @@ class GameBoard(emptySpriteMap: Bitmap) {
     init {
         for (i in gameMap.indices) {
             for (j in gameMap[0].indices) {
-                print(if (gameMap[i][j]) "1" else " ")
+                print(if (gameMap[i][j]) "11" else "  ")
             }
             println()
         }
