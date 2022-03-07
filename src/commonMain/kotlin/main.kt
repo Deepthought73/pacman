@@ -8,13 +8,14 @@ import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import com.soywiz.korma.geom.degrees
 import com.soywiz.korma.interpolation.Easing
+import model.GameBoard
 
 suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"]) {
-    val emptyGameBoardSprite = image(resourcesVfs["gameboard.png"].readBitmap())
+    val emptyGameBoardSprite = resourcesVfs["gameboard.png"].readBitmap()
+    val gameBoard = GameBoard(emptyGameBoardSprite)
 
 
-
-
+    /*
     var minDegrees = (-16).degrees
     val maxDegrees = (+16).degrees
 
@@ -28,5 +29,5 @@ suspend fun main() = Korge(width = 512, height = 512, bgcolor = Colors["#2b2b2b"
     while (true) {
         image.tween(image::rotation[minDegrees], time = 1.seconds, easing = Easing.LINEAR)
         minDegrees = (minDegrees.degrees - 20).degrees
-    }
+    }*/
 }
