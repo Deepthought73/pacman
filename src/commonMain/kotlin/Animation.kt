@@ -5,7 +5,7 @@ import model.Directory
 
 class Animation(
     private val images: List<Bitmap>,
-    private val cyclesPerChange: Int = 7
+    private val cyclesPerChange: Int = 9
 ) {
 
     private var state = 0;

@@ -4,16 +4,12 @@ import Animation
 import com.soywiz.korge.view.Stage
 import model.Directory
 
-class Blinky private constructor(animations: Map<Directory, Animation>): Ghost(animations) {
+class Blinky private constructor(animations: Map<Directory, Animation>, game: Stage): Ghost(animations, game) {
 
     companion object {
         suspend fun create(game: Stage): Blinky {
-            return Blinky(Animation.createDirectoryAnimationMap("ghosts/blinky"))
+            return Blinky(Animation.createDirectoryAnimationMap("ghosts/blinky"), game)
         }
-    }
-
-    override fun render() {
-        TODO("Not yet implemented")
     }
 
 }

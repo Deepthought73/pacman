@@ -40,7 +40,7 @@ class GameBoard private constructor(
             var pixelCount = 0
             for (y in row * 4 until row * 4 + 4) {
                 for (x in col * 4 until col * 4 + 4) {
-                    if (emptyGameBoard.getRgba(x, y) != RGBA(0, 0, 0)) {
+                    if (emptyGameBoard.getRgba(x, y) != RGBA(0, 0, 0, 0)) {
                         pixelCount++
                     }
                 }
@@ -49,8 +49,21 @@ class GameBoard private constructor(
         }
     }
 
+    fun hasCollision(x: Int, y: Int, width: Int, height: Int): Boolean {
+        for (i in x until x + width) {
+            for (j in y until y + height) {
+                if (gameMap[j][i]) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     init {
         game.image(emptyGameBoard)
+
+        pacman.addListener(this)
     }
 
 }
