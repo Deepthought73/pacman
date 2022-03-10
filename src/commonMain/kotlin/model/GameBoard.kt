@@ -1,7 +1,9 @@
 package model
 
+import com.soywiz.klogger.AnsiEscape
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
+import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.font.BitmapFont
 import com.soywiz.korim.font.TtfFont
@@ -66,7 +68,8 @@ class GameBoard private constructor(
     }
 
     fun renderText() {
-        Text("hallo welt", textSize = 32.0).xy(0,0)
+        var text = Text("hallo welt", textSize = 32.0, color= Colors.WHITE, font=font).xy(0,0)
+        game.addChild(text)
     }
 
     fun createPowerPellets() {
