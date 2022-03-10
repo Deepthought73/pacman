@@ -47,7 +47,23 @@ abstract class Entity(
         shift()
         if (hasCollision(gameBoard)) {
             reShift()
+        } else {
+            if (direction == Directory.DOWN || direction == Directory.UP) {
+                gridVertical()
+            } else {
+                gridHorizontal()
+            }
         }
+    }
+
+    private fun gridHorizontal() {
+        println("grid: "+image.y+" "+(image.y/4).toIntRound()*4)
+        image.y = ((image.y/4).toIntRound()*4).toDouble()
+    }
+
+    private fun gridVertical() {
+        println("grid: "+image.y+" "+(image.y/4).toIntRound()*4)
+        image.x = ((image.x/4).toIntRound()*4).toDouble()
     }
 
     private fun hasCollision(gameBoard: GameBoard): Boolean {
