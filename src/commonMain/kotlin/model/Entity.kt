@@ -57,13 +57,11 @@ abstract class Entity(
     }
 
     private fun gridHorizontal() {
-        println("grid: "+image.y+" "+(image.y/4).toIntRound()*4)
-        image.y = ((image.y/4).toIntRound()*4).toDouble()
+        image.y = ((image.y/4).toIntRound()*4).toDouble() + 0.5
     }
 
     private fun gridVertical() {
-        println("grid: "+image.y+" "+(image.y/4).toIntRound()*4)
-        image.x = ((image.x/4).toIntRound()*4).toDouble()
+        image.x = ((image.x/4).toIntRound()*4).toDouble() + 0.5
     }
 
     private fun hasCollision(gameBoard: GameBoard): Boolean {
