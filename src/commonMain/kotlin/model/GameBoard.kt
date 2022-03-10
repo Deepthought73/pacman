@@ -1,8 +1,10 @@
 package model
 
 import com.soywiz.korge.view.Stage
+import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.image
 import com.soywiz.korim.bitmap.Bitmap
+import com.soywiz.korim.bitmap.slice
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
@@ -12,12 +14,13 @@ class GameBoard private constructor(
     pacman: Pacman,
     ghosts: List<Ghost>,
     game: Stage,
-    emptyGameBoard: Bitmap
+    emptyGameBoard: Bitmap,
+    dotDistributionBitmap: Bitmap
 ) {
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
-            return GameBoard(
+            val res = GameBoard(
                 Pacman.create(game),
                 listOf(
                     Blinky.create(game),
@@ -26,10 +29,20 @@ class GameBoard private constructor(
                     //Clyde.create(game)
                 ),
                 game,
-                resourcesVfs["gameboard.png"].readBitmap()
+                resourcesVfs["gameboard.png"].readBitmap(),
+                resourcesVfs["dotDistribution.png"].readBitmap()
             )
+            for (res in res.dotMap) {
+                for (cell in res) {
+                    //print(""+ (if (cell) 1 else 0)+" ")
+                }
+                //println()
+            }
+            return res
         }
     }
+
+    //26*29
 
     private val gameMap = Array(62) { row ->
         Array(56) { col ->
@@ -43,6 +56,10 @@ class GameBoard private constructor(
             }
             pixelCount > 1
         }
+    }
+
+    private val dotMap = Array(29) { row ->
+        Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*row, 11+8*col) == RGBA(255, 183, 174, 255) }
     }
 
     fun hasCollision(x: Int, y: Int, width: Int, height: Int): Boolean {
