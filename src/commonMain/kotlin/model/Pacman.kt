@@ -6,11 +6,10 @@ import com.soywiz.korev.Key
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.xy
-import com.soywiz.korim.bitmap.slice
-import model.Directory.*
+import model.Direction.*
 
 class Pacman private constructor(
-    animations: Map<Directory, Animation>,
+    animations: Map<Direction, Animation>,
     game: Stage
 ) :
     Entity(animations, game) {
@@ -32,10 +31,6 @@ class Pacman private constructor(
 
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
-
-        game.addUpdater {
-            image.bitmap = animations[direction]!!.next().slice()
-        }
 
         game.addUpdater(fun Stage.(_: TimeSpan) {
             if (input.keys.pressing(Key.LEFT)) nextDirection = LEFT

@@ -6,17 +6,11 @@ import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
-import model.ghosts.Blinky
-import model.ghosts.Clyde
-import model.ghosts.Inky
-import model.ghosts.Pinky
+import model.ghosts.*
 
 class GameBoard private constructor(
-    private val pacman: Pacman,
-    private val blinky: Blinky,
-    private val pinky: Pinky,
-    private val inky: Inky,
-    private val clyde: Clyde,
+    pacman: Pacman,
+    ghosts: List<Ghost>,
     game: Stage,
     emptyGameBoard: Bitmap
 ) {
@@ -25,10 +19,12 @@ class GameBoard private constructor(
         suspend fun create(game: Stage): GameBoard {
             return GameBoard(
                 Pacman.create(game),
-                Blinky.create(game),
-                Pinky.create(game),
-                Inky.create(game),
-                Clyde.create(game),
+                listOf(
+                    Blinky.create(game),
+                    //Pinky.create(game),
+                    //Inky.create(game),
+                    //Clyde.create(game)
+                ),
                 game,
                 resourcesVfs["gameboard.png"].readBitmap()
             )
@@ -52,7 +48,7 @@ class GameBoard private constructor(
     fun hasCollision(x: Int, y: Int, width: Int, height: Int): Boolean {
         for (i in x until x + width) {
             for (j in y until y + height) {
-                if (gameMap[j][i%56]) {
+                if (gameMap[j][i % 56]) {
                     return true
                 }
             }
@@ -64,6 +60,8 @@ class GameBoard private constructor(
         game.image(emptyGameBoard)
 
         pacman.addListener(this)
+        for (g in ghosts)
+            g.addListener(this)
     }
 
 }
