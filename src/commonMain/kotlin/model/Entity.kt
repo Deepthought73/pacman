@@ -63,11 +63,11 @@ abstract class Entity(
         image.x = ((image.x/4).toIntRound()*4).toDouble() + 0.5
     }
 
-    private fun hasCollision(gameBoard: GameBoard): Boolean {
+    protected fun hasCollision(gameBoard: GameBoard): Boolean {
         return gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
     }
 
-    private fun shift(direction_: Direction = direction) {
+    protected fun shift(direction_: Direction = direction) {
         val distance: Double = getSpeed()
         when (direction_) {
             Direction.UP -> image.y -= distance
@@ -85,7 +85,7 @@ abstract class Entity(
         }
     }
 
-    private fun reShift(direction_: Direction = direction) {
+    protected fun reShift(direction_: Direction = direction) {
         val distance = getSpeed()
         when (direction_) {
             Direction.UP -> image.y += distance

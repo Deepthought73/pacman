@@ -11,6 +11,8 @@ import kotlin.math.sqrt
 
 abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entity(animations, game) {
 
+    private var decisionCooldown = 0
+
     override fun getSpeed(): Double {
         return 0.75
     }
@@ -26,36 +28,38 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     abstract fun getTarget(): Pair<Int, Int>
 
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
-        val target = getTarget()
-        var minDirection = direction
-        var minDistance = Double.POSITIVE_INFINITY
+        if (decisionCooldown-- < 0) {
+            val target = getTarget()
+            var minDirection = direction
+            var minDistance = Double.POSITIVE_INFINITY
 
-        for (dir in Direction.values()
-            .filter { it != direction.invert() }
-            .filter {
-                var shiftCount = 0
-                var hadCollision = false
-                while (shiftCount < 10 && !hadCollision) {
-                    shift(it)
-                    shiftCount++
-                    hadCollision = hasCollision(gameBoard)
+            for (dir in Direction.values()
+                .filter { it != direction.invert() }
+                .filter {
+                    var shiftCount = 0
+                    var hadCollision = false
+                    while (shiftCount < 10 && !hadCollision) {
+                        shift(it)
+                        shiftCount++
+                        hadCollision = hasCollision(gameBoard)
+                    }
+                    for (i in 0 until shiftCount)
+                        reShift(it)
+                    !hadCollision
                 }
-                for (i in 0 until shiftCount)
-                    reShift(it)
-                !hadCollision
-            }
-        ) {
-            shift(dir)
-            val distance = sqrt((target.first - image.x).pow(2) + (target.second - image.y).pow(2))
-            reShift(dir)
+            ) {
+                shift(dir)
+                val distance = sqrt((target.first - image.x).pow(2) + (target.second - image.y).pow(2))
+                reShift(dir)
 
-            if (distance < minDistance) {
-                minDistance = distance
-                minDirection = dir
+                if (distance < minDistance) {
+                    minDistance = distance
+                    minDirection = dir
+                }
             }
-        }
 
-        return minDirection
+            return minDirection
+        } else return nextDirection
     }
 
 }
