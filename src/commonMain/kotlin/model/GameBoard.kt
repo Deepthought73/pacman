@@ -1,23 +1,19 @@
 package model
 
-import com.soywiz.klogger.AnsiEscape
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
-import com.soywiz.korim.font.BitmapFont
 import com.soywiz.korim.font.TtfFont
-import com.soywiz.korim.font.readBitmapFont
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korio.stream.openSync
 import model.ghosts.*
 
 const val offset = 50
 
 class GameBoard private constructor(
     val pacman: Pacman,
-    ghosts: List<Ghost>,
+    val ghosts: List<Ghost>,
     private val game: Stage,
     emptyGameBoard: Bitmap,
     dotDistributionBitmap: Bitmap,
@@ -63,35 +59,37 @@ class GameBoard private constructor(
     }
 
     private val dotMap = Array(29) { row ->
-        Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*col, 11+8*row) == RGBA(255, 183, 174, 255) &&
-                dotDistributionBitmap.getRgba(10+8*col, 10+8*row) != RGBA(255, 183, 174, 255)}
+        Array(26) { col ->
+            dotDistributionBitmap.getRgba(11 + 8 * col, 11 + 8 * row) == RGBA(255, 183, 174, 255) &&
+                    dotDistributionBitmap.getRgba(10 + 8 * col, 10 + 8 * row) != RGBA(255, 183, 174, 255)
+        }
     }
 
     fun renderText() {
-        var text = Text("1UP    HIGH SCORE", textSize = 11.0, color= Colors.WHITE, font=font).xy(20,0)
+        var text = Text("1UP    HIGH SCORE", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 0)
         game.addChild(text)
     }
 
-    private var scoreText = Text("00", textSize = 11.0, color= Colors.WHITE, font=font).xy(20,20)
+    private var scoreText = Text("00", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 20)
 
     fun createPowerPellets() {
-        powerPellets.add(game.image(powerPellet).xy(8, 24+offset))
-        powerPellets.add(game.image(powerPellet).xy(208, 24+offset))
-        powerPellets.add(game.image(powerPellet).xy(8, 184+offset))
-        powerPellets.add(game.image(powerPellet).xy(208, 184+offset))
+        powerPellets.add(game.image(powerPellet).xy(8, 24 + offset))
+        powerPellets.add(game.image(powerPellet).xy(208, 24 + offset))
+        powerPellets.add(game.image(powerPellet).xy(8, 184 + offset))
+        powerPellets.add(game.image(powerPellet).xy(208, 184 + offset))
 
     }
 
-    fun updateScore() {
+    private fun updateScore() {
         scoreText.setText(score.toString())
     }
 
     fun createDotObjects() {
-        dotMap.forEachIndexed {
-            y, row -> row.forEachIndexed {
-                x, cell -> if (cell) {
-                    val rect = SolidRect(2, 2, color=RGBA(255, 183, 174, 255))
-                    rect.xy(11+8*x,11+8*y+offset)
+        dotMap.forEachIndexed { y, row ->
+            row.forEachIndexed { x, cell ->
+                if (cell) {
+                    val rect = SolidRect(2, 2, color = RGBA(255, 183, 174, 255))
+                    rect.xy(11 + 8 * x, 11 + 8 * y + offset)
                     dotObjects.add(rect)
                     game.addChild(rect)
                 }
@@ -111,12 +109,12 @@ class GameBoard private constructor(
     }
 
     fun checkDotCollision() {
-
         for (dot in dotObjects) {
             if (dot.x > pacman.getX()
-                && dot.x < pacman.getX()+14
+                && dot.x < pacman.getX() + 14
                 && dot.y > pacman.getY()
-                && dot.y < pacman.getY()+14) {
+                && dot.y < pacman.getY() + 14
+            ) {
                 game.removeChild(dot)
                 dotObjects.remove(dot)
                 score += 10
@@ -127,12 +125,13 @@ class GameBoard private constructor(
         }
     }
 
-    fun checkPowerPalletCollision():Boolean {
+    fun checkPowerPalletCollision(): Boolean {
         for (pellet in powerPellets) {
             if (pellet.x > pacman.getX()
-                && pellet.x < pacman.getX()+14
+                && pellet.x < pacman.getX() + 14
                 && pellet.y > pacman.getY()
-                && pellet.y < pacman.getY()+14) {
+                && pellet.y < pacman.getY() + 14
+            ) {
                 game.removeChild(pellet)
                 powerPellets.remove(pellet)
                 score += 50

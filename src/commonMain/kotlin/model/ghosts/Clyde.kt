@@ -6,6 +6,9 @@ import com.soywiz.korge.view.xy
 import model.Direction
 import model.GameBoard
 import model.offset
+import kotlin.math.pow
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 class Clyde private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
 
@@ -20,7 +23,14 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
-        return Pair(0, 248)
+        val pacmanX = gameBoard.pacman.getX()
+        val pacmanY = gameBoard.pacman.getY()
+
+        val distanceToPacman = sqrt((pacmanX - getX()).pow(2) + (pacmanY - getY()).pow(2))
+        return if (isScattering || distanceToPacman < 8 * 8)
+            Pair(0, 248 + offset)
+        else
+            Pair(gameBoard.pacman.getX().roundToInt(), gameBoard.pacman.getY().roundToInt())
     }
 
 }

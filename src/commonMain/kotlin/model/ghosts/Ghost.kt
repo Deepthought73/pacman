@@ -3,8 +3,11 @@ package model.ghosts
 import Animation
 import com.soywiz.klock.TimeSpan
 import com.soywiz.kmem.toIntFloor
+import com.soywiz.korge.view.SolidRect
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
+import com.soywiz.korge.view.xy
+import com.soywiz.korim.color.RGBA
 import model.Direction
 import model.Entity
 import model.GameBoard
@@ -23,13 +26,20 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         return 0.75
     }
 
+    private val tmpRect = SolidRect(5, 5, color = RGBA(255, 0, 0, 255))
+
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
+
+        game.addChild(tmpRect)
 
         game.addUpdater(fun Stage.(dt: TimeSpan) {
             nextDirection = calculateNextDirection(gameBoard)
 
             scatterCount(dt)
+
+            val t = getTarget(gameBoard)
+            tmpRect.xy(t.first, t.second)
         })
     }
 

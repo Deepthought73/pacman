@@ -12,7 +12,7 @@ abstract class Entity(
     protected val game: Stage
 ) {
 
-    protected var direction = Direction.UP
+    var direction = Direction.UP
     protected var nextDirection = Direction.UP
 
     protected val image = game.image(animations[direction]!!.next())
@@ -25,6 +25,14 @@ abstract class Entity(
     }
 
     protected abstract fun getSpeed(): Double
+
+    fun getX(): Double {
+        return image.x
+    }
+
+    fun getY(): Double {
+        return image.y
+    }
 
     private fun move(gameBoard: GameBoard) {
         val oldDirection = direction
@@ -57,7 +65,7 @@ abstract class Entity(
 
     private fun gridHorizontal() {
         image.y -= offset
-        image.y = ((image.y/ 4).toIntRound() * 4).toDouble() + 0.5
+        image.y = ((image.y / 4).toIntRound() * 4).toDouble() + 0.5
         image.y += offset
     }
 

@@ -6,6 +6,7 @@ import com.soywiz.korge.view.xy
 import model.Direction
 import model.GameBoard
 import model.offset
+import kotlin.math.roundToInt
 
 class Inky private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
 
@@ -20,7 +21,26 @@ class Inky private constructor(animations: Map<Direction, Animation>, game: Stag
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
-        return Pair(224, 248)
+        return if (isScattering)
+            Pair(224, 248 + offset)
+        else {
+            var pacmanX = gameBoard.pacman.getX().roundToInt()
+            var pacmanY = gameBoard.pacman.getY().roundToInt()
+            val blinkyX = gameBoard.ghosts[0].getX().roundToInt()
+            val blinkyY = gameBoard.ghosts[0].getY().roundToInt()
+
+            when (gameBoard.pacman.direction) {
+                Direction.UP -> pacmanY -= 8 * 2
+                Direction.DOWN -> pacmanY += 8 * 2
+                Direction.RIGHT -> pacmanX += 8 * 2
+                Direction.LEFT -> pacmanX -= 8 * 2
+            }
+
+            val vecX = 2 * (pacmanX - blinkyX)
+            val vecY = 2 * (pacmanY - blinkyY)
+
+            Pair(blinkyX + vecX, blinkyY + vecY)
+        }
     }
 
 }

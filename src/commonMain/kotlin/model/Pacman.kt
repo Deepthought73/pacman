@@ -29,14 +29,6 @@ class Pacman private constructor(
         image.xy(26 * 4, 45 * 4 + offset)
     }
 
-    fun getX(): Double {
-        return image.x
-    }
-
-    fun getY(): Double {
-        return image.y
-    }
-
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
 
