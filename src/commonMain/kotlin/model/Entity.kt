@@ -3,6 +3,7 @@ package model
 import Animation
 import com.soywiz.kmem.toIntCeil
 import com.soywiz.kmem.toIntFloor
+import com.soywiz.kmem.toIntRound
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.image
@@ -18,8 +19,7 @@ abstract class Entity(
     open fun addListener(gameBoard: GameBoard) {
         game.addUpdater {
             shift(getSpeed())
-            if (gameBoard.hasCollision((image.x / 4).toIntCeil(), (image.y / 4).toIntCeil(), 4, 4)
-                || gameBoard.hasCollision((image.x / 4).toIntFloor(), (image.y / 4).toIntFloor(), 4, 4)
+            if (gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
             ) {
                 reShift(getSpeed())
             }
