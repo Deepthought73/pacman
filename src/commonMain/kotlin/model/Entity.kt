@@ -31,31 +31,46 @@ abstract class Entity(
         val oldDirection = direction
         direction = nextDirection
         if (oldDirection != direction) {
-            var collision = false
             var shiftCounter = 0
             for (i in 1..10) {
-                shift(getSpeed())
-                collision = collision || gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
-                shiftCounter ++
-                if (collision) {
+                shift(nextDirection)
+                shiftCounter++
+                if (hasCollision(gameBoard)) {
+                    direction = oldDirection
                     break
                 }
             }
             for (i in 1..shiftCounter) {
-                reShift(getSpeed())
+                reShift(nextDirection)
             }
-            if (collision) {
-                direction = oldDirection
-            }
-            shift(getSpeed())
-            if (gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)) {
-                reShift(getSpeed())
-            }
-        } else {
-            shift(getSpeed())
-            if (gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)) {
-                reShift(getSpeed())
-            }
+        }
+        shift()
+        if (hasCollision(gameBoard)) {
+            reShift()
+        }
+    }
+
+    private fun hasCollision(gameBoard: GameBoard): Boolean {
+        return gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
+    }
+
+    private fun shift(direction_: Directory = direction) {
+        val distance: Double = getSpeed()
+        when (direction_) {
+            Directory.UP -> image.y -= distance
+            Directory.DOWN -> image.y += distance
+            Directory.RIGHT -> image.x += distance
+            Directory.LEFT -> image.x -= distance
+        }
+    }
+
+    private fun reShift(direction_: Directory = direction) {
+        val distance: Double = getSpeed()
+        when (direction_) {
+            Directory.UP -> image.y += distance
+            Directory.DOWN -> image.y -= distance
+            Directory.RIGHT -> image.x -= distance
+            Directory.LEFT -> image.x += distance
         }
     }
 
