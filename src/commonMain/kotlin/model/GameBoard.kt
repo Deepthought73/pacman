@@ -10,14 +10,14 @@ import com.soywiz.korma.geom.Rectangle
 import model.ghosts.*
 
 class GameBoard private constructor(
-    pacman: Pacman,
+    private val pacman: Pacman,
     ghosts: List<Ghost>,
     private val game: Stage,
     emptyGameBoard: Bitmap,
     dotDistributionBitmap: Bitmap
 ) {
 
-    var dotObjects: MutableMap<String, SolidRect> = hashMapOf()
+    private var dotObjects: MutableSet<SolidRect> = mutableSetOf()
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
@@ -61,7 +61,7 @@ class GameBoard private constructor(
                 x, cell -> if (cell) {
                     val rect = SolidRect(2, 2, color=RGBA(255, 183, 174, 255))
                     rect.xy(11+8*x,11+8*y)
-                    dotObjects["$x,$y"] = rect
+                    dotObjects.add(rect)
                     game.addChild(rect)
                 }
             }
@@ -77,6 +77,20 @@ class GameBoard private constructor(
             }
         }
         return false
+    }
+
+    fun checkDotCollision() {
+
+        for (dot in dotObjects) {
+            if (dot.x > pacman.getX()
+                && dot.x < pacman.getX()+14
+                && dot.y > pacman.getY()
+                && dot.y < pacman.getY()+14) {
+                game.removeChild(dot)
+                dotObjects.remove(dot)
+                break
+            }
+        }
     }
 
     init {
