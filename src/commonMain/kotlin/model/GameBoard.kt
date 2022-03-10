@@ -18,6 +18,7 @@ class GameBoard private constructor(
 ) {
 
     private var dotObjects: MutableSet<SolidRect> = mutableSetOf()
+    private var score: Int = 0
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
@@ -88,6 +89,8 @@ class GameBoard private constructor(
                 && dot.y < pacman.getY()+14) {
                 game.removeChild(dot)
                 dotObjects.remove(dot)
+                score += 10
+                println("current score: $score")
                 break
             }
         }
