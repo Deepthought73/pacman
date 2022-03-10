@@ -59,8 +59,16 @@ abstract class Entity(
         when (direction_) {
             Directory.UP -> image.y -= distance
             Directory.DOWN -> image.y += distance
-            Directory.RIGHT -> image.x += distance
-            Directory.LEFT -> image.x -= distance
+            Directory.RIGHT -> {
+                image.x = image.x + distance
+                image.x %= 56*4
+            }
+            Directory.LEFT -> {
+                image.x = image.x - distance
+                if (image.x < 0) {
+                    image.x += 56*4
+                }
+            }
         }
     }
 
