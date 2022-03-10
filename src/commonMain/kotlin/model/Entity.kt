@@ -1,27 +1,26 @@
 package model
 
 import Animation
-import com.soywiz.kmem.toIntCeil
-import com.soywiz.kmem.toIntFloor
 import com.soywiz.kmem.toIntRound
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.image
+import com.soywiz.korim.bitmap.slice
 
 abstract class Entity(
-    protected val animations: Map<Directory, Animation>,
+    private val animations: Map<Direction, Animation>,
     protected val game: Stage
 ) {
 
-    protected var direction = Directory.DOWN
-    protected var nextDirection = Directory.DOWN
+    protected var direction = Direction.DOWN
+    protected var nextDirection = Direction.DOWN
 
     protected val image = game.image(animations[direction]!!.next())
-
 
     open fun addListener(gameBoard: GameBoard) {
         game.addUpdater {
             move(gameBoard)
+            image.bitmap = animations[direction]!!.next().slice()
         }
     }
 
@@ -48,7 +47,7 @@ abstract class Entity(
         if (hasCollision(gameBoard)) {
             reShift()
         } else {
-            if (direction == Directory.DOWN || direction == Directory.UP) {
+            if (direction == Direction.DOWN || direction == Direction.UP) {
                 gridVertical()
             } else {
                 gridHorizontal()
@@ -70,49 +69,40 @@ abstract class Entity(
         return gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
     }
 
-    private fun shift(direction_: Directory = direction) {
+    private fun shift(direction_: Direction = direction) {
         val distance: Double = getSpeed()
         when (direction_) {
-            Directory.UP -> image.y -= distance
-            Directory.DOWN -> image.y += distance
-            Directory.RIGHT -> {
+            Direction.UP -> image.y -= distance
+            Direction.DOWN -> image.y += distance
+            Direction.RIGHT -> {
                 image.x = image.x + distance
-                image.x %= 56*4
+                image.x %= 56 * 4
             }
-            Directory.LEFT -> {
+            Direction.LEFT -> {
                 image.x = image.x - distance
                 if (image.x < 0) {
-                    image.x += 56*4
+                    image.x += 56 * 4
                 }
             }
         }
     }
 
-    private fun reShift(direction_: Directory = direction) {
-        val distance: Double = getSpeed()
+    private fun reShift(direction_: Direction = direction) {
+        val distance = getSpeed()
         when (direction_) {
-            Directory.UP -> image.y += distance
-            Directory.DOWN -> image.y -= distance
-            Directory.RIGHT -> image.x -= distance
-            Directory.LEFT -> image.x += distance
+            Direction.UP -> image.y += distance
+            Direction.DOWN -> image.y -= distance
+            Direction.RIGHT -> image.x -= distance
+            Direction.LEFT -> image.x += distance
         }
     }
 
     private fun shift(distance: Double) {
         when (direction) {
-            Directory.UP -> image.y -= distance
-            Directory.DOWN -> image.y += distance
-            Directory.RIGHT -> image.x += distance
-            Directory.LEFT -> image.x -= distance
-        }
-    }
-
-    private fun reShift(distance: Double) {
-        when (direction) {
-            Directory.UP -> image.y += distance
-            Directory.DOWN -> image.y -= distance
-            Directory.RIGHT -> image.x -= distance
-            Directory.LEFT -> image.x += distance
+            Direction.UP -> image.y -= distance
+            Direction.DOWN -> image.y += distance
+            Direction.RIGHT -> image.x += distance
+            Direction.LEFT -> image.x -= distance
         }
     }
 

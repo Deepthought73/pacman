@@ -1,5 +1,5 @@
 package model
 
-enum class Directory {
+enum class Direction {
     UP, DOWN, RIGHT, LEFT
 }
