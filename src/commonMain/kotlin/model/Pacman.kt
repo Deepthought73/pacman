@@ -38,10 +38,10 @@ class Pacman private constructor(
         }
 
         game.addUpdater(fun Stage.(_: TimeSpan) {
-            if (input.keys.pressing(Key.LEFT)) direction = LEFT
-            else if (input.keys.pressing(Key.RIGHT)) direction = RIGHT
-            else if (input.keys.pressing(Key.UP)) direction = UP
-            else if (input.keys.pressing(Key.DOWN)) direction = DOWN
+            if (input.keys.pressing(Key.LEFT)) nextDirection = LEFT
+            else if (input.keys.pressing(Key.RIGHT)) nextDirection = RIGHT
+            else if (input.keys.pressing(Key.UP)) nextDirection = UP
+            else if (input.keys.pressing(Key.DOWN)) nextDirection = DOWN
         })
     }
 
