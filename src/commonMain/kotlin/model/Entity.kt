@@ -56,18 +56,18 @@ abstract class Entity(
     }
 
     private fun gridHorizontal() {
-        image.y = ((image.y / 4).toIntRound() * 4).toDouble()
+        image.y = ((image.y/4).toIntRound()*4).toDouble() + 0.5
     }
 
     private fun gridVertical() {
-        image.x = ((image.x / 4).toIntRound() * 4).toDouble()
+        image.x = ((image.x/4).toIntRound()*4).toDouble() + 0.5
     }
 
-    protected fun hasCollision(gameBoard: GameBoard): Boolean {
+    private fun hasCollision(gameBoard: GameBoard): Boolean {
         return gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
     }
 
-    protected fun shift(direction_: Direction = direction) {
+    private fun shift(direction_: Direction = direction) {
         val distance: Double = getSpeed()
         when (direction_) {
             Direction.UP -> image.y -= distance
@@ -85,13 +85,22 @@ abstract class Entity(
         }
     }
 
-    protected fun reShift(direction_: Direction = direction) {
+    private fun reShift(direction_: Direction = direction) {
         val distance = getSpeed()
         when (direction_) {
             Direction.UP -> image.y += distance
             Direction.DOWN -> image.y -= distance
             Direction.RIGHT -> image.x -= distance
             Direction.LEFT -> image.x += distance
+        }
+    }
+
+    private fun shift(distance: Double) {
+        when (direction) {
+            Direction.UP -> image.y -= distance
+            Direction.DOWN -> image.y += distance
+            Direction.RIGHT -> image.x += distance
+            Direction.LEFT -> image.x -= distance
         }
     }
 
