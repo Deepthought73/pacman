@@ -28,7 +28,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     abstract fun getTarget(): Pair<Int, Int>
 
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
-        if (decisionCooldown-- < 0) {
+        if (decisionCooldown-- <= 0) {
             val target = getTarget()
             var minDirection = direction
             var minDistance = Double.POSITIVE_INFINITY
@@ -58,6 +58,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
                 }
             }
 
+            decisionCooldown = 3
             return minDirection
         } else return nextDirection
     }
