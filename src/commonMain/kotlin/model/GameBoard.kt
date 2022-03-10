@@ -2,12 +2,16 @@ package model
 
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
-import com.soywiz.korim.bitmap.slice
 import com.soywiz.korim.color.RGBA
+import com.soywiz.korim.font.BitmapFont
+import com.soywiz.korim.font.TtfFont
+import com.soywiz.korim.font.readBitmapFont
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
-import com.soywiz.korma.geom.Rectangle
+import com.soywiz.korio.stream.openSync
 import model.ghosts.*
+
+const val offset = 50
 
 class GameBoard private constructor(
     private val pacman: Pacman,
@@ -15,7 +19,8 @@ class GameBoard private constructor(
     private val game: Stage,
     emptyGameBoard: Bitmap,
     dotDistributionBitmap: Bitmap,
-    private val powerPellet: Bitmap
+    private val powerPellet: Bitmap,
+    private val font: TtfFont
 ) {
 
     private var dotObjects: MutableSet<SolidRect> = mutableSetOf()
@@ -24,20 +29,20 @@ class GameBoard private constructor(
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
-            val res = GameBoard(
-                Pacman.create(game),
+            return GameBoard(
+                Pacman.create(game, offset),
                 listOf(
-                    Blinky.create(game),
-                    Pinky.create(game),
-                    Inky.create(game),
-                    Clyde.create(game)
+                    Blinky.create(game, offset),
+                    Pinky.create(game, offset),
+                    Inky.create(game, offset),
+                    Clyde.create(game, offset)
                 ),
                 game,
                 resourcesVfs["gameboard.png"].readBitmap(),
                 resourcesVfs["dotDistribution.png"].readBitmap(),
-                resourcesVfs["powerPellet.png"].readBitmap()
+                resourcesVfs["powerPellet.png"].readBitmap(),
+                TtfFont(resourcesVfs["font.ttf"].readAll())
             )
-            return res
         }
     }
 
@@ -60,11 +65,15 @@ class GameBoard private constructor(
                 dotDistributionBitmap.getRgba(10+8*col, 10+8*row) != RGBA(255, 183, 174, 255)}
     }
 
+    fun renderText() {
+        Text("hallo welt", textSize = 32.0).xy(0,0)
+    }
+
     fun createPowerPellets() {
-        powerPellets.add(game.image(powerPellet).xy(8, 24))
-        powerPellets.add(game.image(powerPellet).xy(208, 24))
-        powerPellets.add(game.image(powerPellet).xy(8, 184))
-        powerPellets.add(game.image(powerPellet).xy(208, 184))
+        powerPellets.add(game.image(powerPellet).xy(8, 24+offset))
+        powerPellets.add(game.image(powerPellet).xy(208, 24+offset))
+        powerPellets.add(game.image(powerPellet).xy(8, 184+offset))
+        powerPellets.add(game.image(powerPellet).xy(208, 184+offset))
 
     }
 
@@ -73,7 +82,7 @@ class GameBoard private constructor(
             y, row -> row.forEachIndexed {
                 x, cell -> if (cell) {
                     val rect = SolidRect(2, 2, color=RGBA(255, 183, 174, 255))
-                    rect.xy(11+8*x,11+8*y)
+                    rect.xy(11+8*x,11+8*y+offset)
                     dotObjects.add(rect)
                     game.addChild(rect)
                 }
@@ -125,7 +134,7 @@ class GameBoard private constructor(
     }
 
     init {
-        game.image(emptyGameBoard)
+        game.image(emptyGameBoard).xy(0, offset)
 
         pacman.addListener(this)
         for (g in ghosts)

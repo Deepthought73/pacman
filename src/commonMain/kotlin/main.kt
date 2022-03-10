@@ -7,10 +7,11 @@ import com.soywiz.korge.view.addUpdater
 import com.soywiz.korim.color.Colors
 import model.GameBoard
 
-suspend fun main() = Korge(width = 224, height = 248, bgcolor = Colors["#000000"]) {
+suspend fun main() = Korge(width = 224, height = 248+50, bgcolor = Colors["#000000"]) {
     var gameBoard = GameBoard.create(this)
     gameBoard.createPowerPellets()
     gameBoard.createDotObjects()
+    gameBoard.renderText()
 
 
     /*

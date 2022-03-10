@@ -10,23 +10,25 @@ import model.Direction.*
 
 class Pacman private constructor(
     animations: Map<Direction, Animation>,
-    game: Stage
+    game: Stage,
+    offset: Int
 ) :
     Entity(animations, game) {
 
     companion object {
         private const val SPEED = 0.75
 
-        suspend fun create(game: Stage): Pacman {
+        suspend fun create(game: Stage, offset: Int): Pacman {
             return Pacman(
                 Animation.createDirectoryAnimationMap("pacman"),
-                game
+                game,
+                offset
             )
         }
     }
 
     init {
-        image.xy(26 * 4, 45 * 4)
+        image.xy(26 * 4, 45 * 4+ offset)
     }
 
     fun getX():Double {

@@ -56,7 +56,9 @@ abstract class Entity(
     }
 
     private fun gridHorizontal() {
-        image.y = ((image.y / 4).toIntRound() * 4).toDouble() + 0.5
+        image.y -= offset
+        image.y = ((image.y/ 4).toIntRound() * 4).toDouble() + 0.5
+        image.y += offset
     }
 
     private fun gridVertical() {
@@ -64,7 +66,7 @@ abstract class Entity(
     }
 
     protected fun hasCollision(gameBoard: GameBoard): Boolean {
-        return gameBoard.hasCollision((image.x / 4).toIntRound(), (image.y / 4).toIntRound(), 4, 4)
+        return gameBoard.hasCollision((image.x / 4).toIntRound(), ((image.y - offset) / 4).toIntRound(), 4, 4)
     }
 
     protected fun shift(direction_: Direction = direction) {
