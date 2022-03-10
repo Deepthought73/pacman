@@ -46,6 +46,7 @@ class Pacman private constructor(
             else if (input.keys.pressing(Key.UP)) nextDirection = UP
             else if (input.keys.pressing(Key.DOWN)) nextDirection = DOWN
             gameBoard.checkDotCollision()
+            gameBoard.checkPowerPalletCollision()
         })
     }
 

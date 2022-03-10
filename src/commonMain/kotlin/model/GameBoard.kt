@@ -14,10 +14,12 @@ class GameBoard private constructor(
     ghosts: List<Ghost>,
     private val game: Stage,
     emptyGameBoard: Bitmap,
-    dotDistributionBitmap: Bitmap
+    dotDistributionBitmap: Bitmap,
+    private val powerPellet: Bitmap
 ) {
 
     private var dotObjects: MutableSet<SolidRect> = mutableSetOf()
+    private var powerPellets: MutableSet<Image> = mutableSetOf()
     private var score: Int = 0
 
     companion object {
@@ -32,7 +34,8 @@ class GameBoard private constructor(
                 ),
                 game,
                 resourcesVfs["gameboard.png"].readBitmap(),
-                resourcesVfs["dotDistribution.png"].readBitmap()
+                resourcesVfs["dotDistribution.png"].readBitmap(),
+                resourcesVfs["powerPellet.png"].readBitmap()
             )
             return res
         }
@@ -55,6 +58,14 @@ class GameBoard private constructor(
     private val dotMap = Array(29) { row ->
         Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*col, 11+8*row) == RGBA(255, 183, 174, 255) &&
                 dotDistributionBitmap.getRgba(10+8*col, 10+8*row) != RGBA(255, 183, 174, 255)}
+    }
+
+    fun createPowerPellets() {
+        powerPellets.add(game.image(powerPellet).xy(8, 24))
+        powerPellets.add(game.image(powerPellet).xy(208, 24))
+        powerPellets.add(game.image(powerPellet).xy(8, 184))
+        powerPellets.add(game.image(powerPellet).xy(208, 184))
+
     }
 
     fun createDotObjects() {
@@ -95,6 +106,22 @@ class GameBoard private constructor(
                 break
             }
         }
+    }
+
+    fun checkPowerPalletCollision():Boolean {
+        for (pellet in powerPellets) {
+            if (pellet.x > pacman.getX()
+                && pellet.x < pacman.getX()+14
+                && pellet.y > pacman.getY()
+                && pellet.y < pacman.getY()+14) {
+                game.removeChild(pellet)
+                powerPellets.remove(pellet)
+                score += 50
+                println("current score: $score")
+                return true
+            }
+        }
+        return false
     }
 
     init {

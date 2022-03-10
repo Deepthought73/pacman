@@ -8,7 +8,9 @@ import com.soywiz.korim.color.Colors
 import model.GameBoard
 
 suspend fun main() = Korge(width = 224, height = 248, bgcolor = Colors["#000000"]) {
-    GameBoard.create(this).createDotObjects()
+    var gameBoard = GameBoard.create(this)
+    gameBoard.createPowerPellets()
+    gameBoard.createDotObjects()
 
 
     /*
