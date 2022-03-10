@@ -15,12 +15,10 @@ class Blinky private constructor(animations: Map<Direction, Animation>, game: St
 
     init {
         image.xy(26 * 4, 21 * 4)
-        direction = Direction.LEFT
-        nextDirection = Direction.LEFT
     }
 
     override fun getTarget(): Pair<Int, Int> {
-        return Pair(0, 0)
+        return Pair(224, 0)
     }
 
 }

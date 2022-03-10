@@ -12,8 +12,8 @@ abstract class Entity(
     protected val game: Stage
 ) {
 
-    protected var direction = Direction.DOWN
-    protected var nextDirection = Direction.DOWN
+    protected var direction = Direction.UP
+    protected var nextDirection = Direction.UP
 
     protected val image = game.image(animations[direction]!!.next())
 
@@ -56,11 +56,11 @@ abstract class Entity(
     }
 
     private fun gridHorizontal() {
-        image.y = ((image.y/4).toIntRound()*4).toDouble() + 0.5
+        image.y = ((image.y / 4).toIntRound() * 4).toDouble() + 0.5
     }
 
     private fun gridVertical() {
-        image.x = ((image.x/4).toIntRound()*4).toDouble() + 0.5
+        image.x = ((image.x / 4).toIntRound() * 4).toDouble() + 0.5
     }
 
     protected fun hasCollision(gameBoard: GameBoard): Boolean {

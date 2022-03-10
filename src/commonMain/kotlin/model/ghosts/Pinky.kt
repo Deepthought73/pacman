@@ -2,6 +2,7 @@ package model.ghosts
 
 import Animation
 import com.soywiz.korge.view.Stage
+import com.soywiz.korge.view.xy
 import model.Direction
 
 class Pinky private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
@@ -12,8 +13,12 @@ class Pinky private constructor(animations: Map<Direction, Animation>, game: Sta
         }
     }
 
+    init {
+        image.xy(26 * 4, 21 * 4)
+    }
+
     override fun getTarget(): Pair<Int, Int> {
-        TODO("Not yet implemented")
+        return Pair(0, 0)
     }
 
 }

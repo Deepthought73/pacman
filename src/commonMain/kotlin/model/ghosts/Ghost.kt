@@ -1,6 +1,7 @@
 package model.ghosts
 
 import Animation
+import com.soywiz.klock.TimeSpan
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import model.Direction
@@ -12,6 +13,8 @@ import kotlin.math.sqrt
 abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entity(animations, game) {
 
     private var decisionCooldown = 0
+    protected var isScattering = true
+    protected var scatterCounter = 0
 
     override fun getSpeed(): Double {
         return 0.75

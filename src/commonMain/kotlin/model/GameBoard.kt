@@ -25,9 +25,9 @@ class GameBoard private constructor(
                 Pacman.create(game),
                 listOf(
                     Blinky.create(game),
-                    //Pinky.create(game),
-                    //Inky.create(game),
-                    //Clyde.create(game)
+                    Pinky.create(game),
+                    Inky.create(game),
+                    Clyde.create(game)
                 ),
                 game,
                 resourcesVfs["gameboard.png"].readBitmap(),
