@@ -12,7 +12,7 @@ class Inky private constructor(animations: Map<Direction, Animation>, game: Stag
         }
     }
 
-    override fun getAim(): Pair<Int, Int> {
+    override fun getTarget(): Pair<Int, Int> {
         TODO("Not yet implemented")
     }
 

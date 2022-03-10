@@ -12,7 +12,7 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
         }
     }
 
-    override fun getAim(): Pair<Int, Int> {
+    override fun getTarget(): Pair<Int, Int> {
         TODO("Not yet implemented")
     }
 

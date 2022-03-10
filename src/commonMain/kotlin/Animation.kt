@@ -8,7 +8,7 @@ class Animation(
     private val cyclesPerChange: Int = 9
 ) {
 
-    private var state = 0;
+    private var state = 0
 
     companion object {
         suspend fun createDirectoryAnimationMap(entityName: String): Map<Direction, Animation> {

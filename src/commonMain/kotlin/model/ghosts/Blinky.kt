@@ -19,7 +19,7 @@ class Blinky private constructor(animations: Map<Direction, Animation>, game: St
         nextDirection = Direction.LEFT
     }
 
-    override fun getAim(): Pair<Int, Int> {
+    override fun getTarget(): Pair<Int, Int> {
         return Pair(0, 0)
     }
 
