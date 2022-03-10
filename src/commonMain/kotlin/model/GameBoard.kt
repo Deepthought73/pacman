@@ -68,9 +68,11 @@ class GameBoard private constructor(
     }
 
     fun renderText() {
-        var text = Text("hallo welt", textSize = 32.0, color= Colors.WHITE, font=font).xy(0,0)
+        var text = Text("1UP    HIGH SCORE", textSize = 11.0, color= Colors.WHITE, font=font).xy(20,0)
         game.addChild(text)
     }
+
+    private var scoreText = Text("00", textSize = 11.0, color= Colors.WHITE, font=font).xy(20,20)
 
     fun createPowerPellets() {
         powerPellets.add(game.image(powerPellet).xy(8, 24+offset))
@@ -78,6 +80,10 @@ class GameBoard private constructor(
         powerPellets.add(game.image(powerPellet).xy(8, 184+offset))
         powerPellets.add(game.image(powerPellet).xy(208, 184+offset))
 
+    }
+
+    fun updateScore() {
+        scoreText.setText(score.toString())
     }
 
     fun createDotObjects() {
@@ -114,6 +120,7 @@ class GameBoard private constructor(
                 game.removeChild(dot)
                 dotObjects.remove(dot)
                 score += 10
+                updateScore()
                 println("current score: $score")
                 break
             }
@@ -129,6 +136,7 @@ class GameBoard private constructor(
                 game.removeChild(pellet)
                 powerPellets.remove(pellet)
                 score += 50
+                updateScore()
                 println("current score: $score")
                 return true
             }
@@ -142,6 +150,8 @@ class GameBoard private constructor(
         pacman.addListener(this)
         for (g in ghosts)
             g.addListener(this)
+
+        game.addChild(scoreText)
     }
 
 }
