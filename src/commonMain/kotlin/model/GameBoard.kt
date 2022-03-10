@@ -32,11 +32,11 @@ class GameBoard private constructor(
                 resourcesVfs["gameboard.png"].readBitmap(),
                 resourcesVfs["dotDistribution.png"].readBitmap()
             )
-            for (res in res.dotMap) {
-                for (cell in res) {
-                    //print(""+ (if (cell) 1 else 0)+" ")
+            for (row in res.dotMap) {
+                for (cell in row) {
+                    print(""+ (if (cell) 1 else 0)+" ")
                 }
-                //println()
+                println()
             }
             return res
         }
@@ -59,7 +59,7 @@ class GameBoard private constructor(
     }
 
     private val dotMap = Array(29) { row ->
-        Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*row, 11+8*col) == RGBA(255, 183, 174, 255) }
+        Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*col, 11+8*row) == RGBA(255, 183, 174, 255) }
     }
 
     fun hasCollision(x: Int, y: Int, width: Int, height: Int): Boolean {
