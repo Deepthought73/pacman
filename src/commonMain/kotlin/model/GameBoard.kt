@@ -53,7 +53,8 @@ class GameBoard private constructor(
     }
 
     private val dotMap = Array(29) { row ->
-        Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*col, 11+8*row) == RGBA(255, 183, 174, 255) }
+        Array(26) { col ->  dotDistributionBitmap.getRgba(11+8*col, 11+8*row) == RGBA(255, 183, 174, 255) &&
+                dotDistributionBitmap.getRgba(10+8*col, 10+8*row) != RGBA(255, 183, 174, 255)}
     }
 
     fun createDotObjects() {
