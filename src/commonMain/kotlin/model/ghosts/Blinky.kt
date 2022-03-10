@@ -4,6 +4,8 @@ import Animation
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.xy
 import model.Direction
+import model.GameBoard
+import kotlin.math.roundToInt
 import model.offset
 
 class Blinky private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
@@ -18,8 +20,11 @@ class Blinky private constructor(animations: Map<Direction, Animation>, game: St
         image.xy(26 * 4, 21 * 4+ offset)
     }
 
-    override fun getTarget(): Pair<Int, Int> {
-        return Pair(224, 0)
+    override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
+        return if (isScattering)
+            Pair(224, 0)
+        else
+            Pair(gameBoard.pacman.getX().roundToInt(), gameBoard.pacman.getY().roundToInt())
     }
 
 }

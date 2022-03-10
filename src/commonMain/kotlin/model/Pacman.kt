@@ -16,9 +16,7 @@ class Pacman private constructor(
     Entity(animations, game) {
 
     companion object {
-        private const val SPEED = 0.75
-
-        suspend fun create(game: Stage, offset: Int): Pacman {
+        suspend fun create(game: Stage): Pacman {
             return Pacman(
                 Animation.createDirectoryAnimationMap("pacman"),
                 game,
@@ -28,14 +26,14 @@ class Pacman private constructor(
     }
 
     init {
-        image.xy(26 * 4, 45 * 4+ offset)
+        image.xy(26 * 4, 45 * 4 + offset)
     }
 
-    fun getX():Double {
+    fun getX(): Double {
         return image.x
     }
 
-    fun getY():Double {
+    fun getY(): Double {
         return image.y
     }
 

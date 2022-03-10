@@ -16,7 +16,7 @@ import model.ghosts.*
 const val offset = 50
 
 class GameBoard private constructor(
-    private val pacman: Pacman,
+    val pacman: Pacman,
     ghosts: List<Ghost>,
     private val game: Stage,
     emptyGameBoard: Bitmap,
@@ -32,7 +32,7 @@ class GameBoard private constructor(
     companion object {
         suspend fun create(game: Stage): GameBoard {
             return GameBoard(
-                Pacman.create(game, offset),
+                Pacman.create(game),
                 listOf(
                     Blinky.create(game, offset),
                     Pinky.create(game, offset),

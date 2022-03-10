@@ -2,11 +2,13 @@ package model.ghosts
 
 import Animation
 import com.soywiz.klock.TimeSpan
+import com.soywiz.kmem.toIntFloor
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import model.Direction
 import model.Entity
 import model.GameBoard
+import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -14,7 +16,8 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
     private var decisionCooldown = 0
     protected var isScattering = true
-    protected var scatterCounter = 0
+    private var timer = TimeSpan(0.0)
+    private val scatterChanges = mutableListOf(7, 27, 34, 54, 59, 79, 84)
 
     override fun getSpeed(): Double {
         return 0.75
@@ -23,16 +26,27 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
 
-        game.addUpdater {
+        game.addUpdater(fun Stage.(dt: TimeSpan) {
             nextDirection = calculateNextDirection(gameBoard)
+
+            scatterCount(dt)
+        })
+    }
+
+    abstract fun getTarget(gameBoard: GameBoard): Pair<Int, Int>
+
+    private fun scatterCount(dt: TimeSpan) {
+        timer += dt
+
+        if (timer.seconds.toInt() in scatterChanges) {
+            scatterChanges.remove(timer.seconds.toInt())
+            isScattering = !isScattering
         }
     }
 
-    abstract fun getTarget(): Pair<Int, Int>
-
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
         if (decisionCooldown-- <= 0) {
-            val target = getTarget()
+            val target = getTarget(gameBoard)
             var minDirection = direction
             var minDistance = Double.POSITIVE_INFINITY
 

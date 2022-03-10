@@ -1,17 +1,12 @@
-import com.soywiz.klock.TimeSpan
-import com.soywiz.klock.milliseconds
-import com.soywiz.korev.Key
 import com.soywiz.korge.Korge
-import com.soywiz.korge.view.Stage
-import com.soywiz.korge.view.addUpdater
 import com.soywiz.korim.color.Colors
 import model.GameBoard
+import model.offset
 
-suspend fun main() = Korge(width = 224, height = 248+50, bgcolor = Colors["#000000"]) {
-    var gameBoard = GameBoard.create(this)
+suspend fun main() = Korge(width = 224, height = 248 + offset, bgcolor = Colors["#000000"]) {
+    val gameBoard = GameBoard.create(this)
     gameBoard.createPowerPellets()
     gameBoard.createDotObjects()
-    gameBoard.renderText()
 
 
     /*

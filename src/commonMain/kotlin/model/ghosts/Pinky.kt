@@ -4,6 +4,7 @@ import Animation
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.xy
 import model.Direction
+import model.GameBoard
 import model.offset
 
 class Pinky private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
@@ -18,7 +19,7 @@ class Pinky private constructor(animations: Map<Direction, Animation>, game: Sta
         image.xy(26 * 4, 21 * 4+ offset)
     }
 
-    override fun getTarget(): Pair<Int, Int> {
+    override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
         return Pair(0, 0)
     }
 
