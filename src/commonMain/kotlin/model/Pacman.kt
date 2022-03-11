@@ -7,6 +7,7 @@ import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.xy
 import model.Direction.*
+import model.ghosts.Ghost
 
 class Pacman private constructor(
     animations: Map<Direction, Animation>,
@@ -43,7 +44,8 @@ class Pacman private constructor(
     }
 
     override fun getSpeed(): Double {
-        return 0.75
+        return if (Ghost.isFrightened) 0.9
+        else 0.8
     }
 
 }

@@ -27,6 +27,8 @@ class GameBoard private constructor(
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
+            Ghost.loadAnimations()
+
             return GameBoard(
                 Pacman.create(game),
                 listOf(
@@ -72,19 +74,18 @@ class GameBoard private constructor(
 
     private var scoreText = Text("00", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 20)
 
-    fun createPowerPellets() {
+    private fun createPowerPellets() {
         powerPellets.add(game.image(powerPellet).xy(8, 24 + offset))
         powerPellets.add(game.image(powerPellet).xy(208, 24 + offset))
         powerPellets.add(game.image(powerPellet).xy(8, 184 + offset))
         powerPellets.add(game.image(powerPellet).xy(208, 184 + offset))
-
     }
 
     private fun updateScore() {
         scoreText.setText(score.toString())
     }
 
-    fun createDotObjects() {
+    private fun createDotObjects() {
         dotMap.forEachIndexed { y, row ->
             row.forEachIndexed { x, cell ->
                 if (cell) {
@@ -144,6 +145,9 @@ class GameBoard private constructor(
     }
 
     init {
+        createDotObjects()
+        createPowerPellets()
+
         game.image(emptyGameBoard).xy(0, offset)
 
         pacman.addListener(this)

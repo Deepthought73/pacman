@@ -5,6 +5,8 @@ import com.soywiz.kmem.toIntRound
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.image
+import com.soywiz.korim.bitmap.Bitmap
+import com.soywiz.korim.bitmap.BitmapSlice
 import com.soywiz.korim.bitmap.slice
 
 abstract class Entity(
@@ -20,11 +22,15 @@ abstract class Entity(
     open fun addListener(gameBoard: GameBoard) {
         game.addUpdater {
             move(gameBoard)
-            image.bitmap = animations[direction]!!.next().slice()
+            image.bitmap = getNextBitmap()
         }
     }
 
     protected abstract fun getSpeed(): Double
+
+    protected open fun getNextBitmap(): BitmapSlice<Bitmap> {
+        return animations[direction]!!.next().slice()
+    }
 
     fun getX(): Double {
         return image.x

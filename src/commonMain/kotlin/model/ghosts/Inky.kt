@@ -8,16 +8,16 @@ import model.GameBoard
 import model.offset
 import kotlin.math.roundToInt
 
-class Inky private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
+class Inky private constructor(animations: Map<Direction, Animation>, game: Stage) : Ghost(animations, game) {
 
     companion object {
-        suspend fun create(game: Stage,offset: Int): Inky {
+        suspend fun create(game: Stage, offset: Int): Inky {
             return Inky(Animation.createDirectoryAnimationMap("ghosts/inky"), game)
         }
     }
 
     init {
-        image.xy(26 * 4, 21 * 4+ offset)
+        image.xy(26 * 4, 21 * 4 + offset)
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
