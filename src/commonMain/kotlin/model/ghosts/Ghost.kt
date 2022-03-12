@@ -78,7 +78,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
 
-        game.addUpdater(fun Stage.(dt: TimeSpan) {
+        game.addUpdater(fun Stage.(_: TimeSpan) {
             nextDirection = calculateNextDirection(gameBoard)
         })
     }
@@ -126,7 +126,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
                 }
             }
 
-            decisionCooldown = 3
+            decisionCooldown = 4
             return minDirection
         } else return nextDirection
     }
