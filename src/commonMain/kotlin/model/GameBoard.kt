@@ -28,6 +28,7 @@ class GameBoard private constructor(
     companion object {
         suspend fun create(game: Stage): GameBoard {
             Ghost.loadAnimations()
+            Ghost.addListener(game)
 
             return GameBoard(
                 Pacman.create(game),
@@ -138,6 +139,8 @@ class GameBoard private constructor(
                 score += 50
                 updateScore()
                 println("current score: $score")
+
+                Ghost.frighten()
                 return true
             }
         }

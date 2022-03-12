@@ -2,6 +2,7 @@ package model.ghosts
 
 import Animation
 import com.soywiz.klock.TimeSpan
+import com.soywiz.klock.seconds
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korim.bitmap.Bitmap
@@ -19,14 +20,39 @@ import kotlin.random.Random
 abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entity(animations, game) {
 
     private var decisionCooldown = 0
-    protected var isScattering = true
-    private var timer = TimeSpan(0.0)
-    private val scatterChanges = mutableListOf(7, 27, 34, 54, 59, 79, 84)
 
     companion object {
-        var isFrightened = true
+        private val FRIGHTENED_DURATION = 10.0.seconds
+
+        var isFrightened = false
+        var isScattering = true
+
+        private var scatterTimer = TimeSpan(0.0)
+        private val scatterChanges = mutableListOf(7, 27, 34, 54, 59, 79, 84)
+        private var frightenedTimer = 0.0.seconds
 
         private lateinit var frightenedAnimations: Animation
+
+        fun frighten() {
+            isFrightened = true
+            frightenedTimer = FRIGHTENED_DURATION
+        }
+
+        fun addListener(game: Stage) {
+            game.addUpdater(fun Stage.(dt: TimeSpan) {
+                scatterTimer += dt
+
+                if (scatterTimer.seconds.toInt() in scatterChanges) {
+                    scatterChanges.remove(scatterTimer.seconds.toInt())
+                    isScattering = !isScattering
+                }
+
+                if (frightenedTimer > 0.0.seconds)
+                    frightenedTimer -= dt
+                else
+                    isFrightened = false
+            })
+        }
 
         suspend fun loadAnimations() {
             frightenedAnimations = Animation(
@@ -53,8 +79,6 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
         game.addUpdater(fun Stage.(dt: TimeSpan) {
             nextDirection = calculateNextDirection(gameBoard)
-
-            scatterCount(dt)
         })
     }
 
@@ -66,15 +90,6 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     abstract fun getTarget(gameBoard: GameBoard): Pair<Int, Int>
-
-    private fun scatterCount(dt: TimeSpan) {
-        timer += dt
-
-        if (timer.seconds.toInt() in scatterChanges) {
-            scatterChanges.remove(timer.seconds.toInt())
-            isScattering = !isScattering
-        }
-    }
 
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
         if (decisionCooldown-- <= 0) {
