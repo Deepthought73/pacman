@@ -102,7 +102,7 @@ class GameBoard private constructor(
     fun hasCollision(x: Int, y: Int, width: Int, height: Int): Boolean {
         for (i in x until x + width) {
             for (j in y until y + height) {
-                if (gameMap[j][i % 56]) {
+                if (gameMap[j][i.mod(56)]) {
                     return true
                 }
             }
