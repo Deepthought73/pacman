@@ -13,6 +13,7 @@ import com.soywiz.korio.file.std.resourcesVfs
 import model.Direction
 import model.Entity
 import model.GameBoard
+import model.offset
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.random.Random
@@ -71,7 +72,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     private fun inTunnel(): Boolean {
-        return false
+        return image.y - offset in 108.0..120.0 && (image.x <= 28.0 || 180.0 <= image.x)
     }
 
     override fun addListener(gameBoard: GameBoard) {
