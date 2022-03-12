@@ -26,8 +26,12 @@ class Pacman private constructor(
         }
     }
 
-    init {
+    fun initialPos() {
         image.xy(26 * 4, 45 * 4 + offset)
+    }
+
+    init {
+        initialPos()
     }
 
     override fun addListener(gameBoard: GameBoard) {
@@ -39,7 +43,8 @@ class Pacman private constructor(
             else if (input.keys.pressing(Key.UP)) nextDirection = UP
             else if (input.keys.pressing(Key.DOWN)) nextDirection = DOWN
             gameBoard.checkDotCollision()
-            gameBoard.checkPowerPalletCollision(gameBoard)
+            gameBoard.checkPowerPalletCollision()
+            gameBoard.checkGhostCollision()
         })
     }
 

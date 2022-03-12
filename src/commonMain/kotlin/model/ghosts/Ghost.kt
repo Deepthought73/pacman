@@ -166,4 +166,6 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         } else return nextDirection
     }
 
+    abstract fun initialPos()
+
 }

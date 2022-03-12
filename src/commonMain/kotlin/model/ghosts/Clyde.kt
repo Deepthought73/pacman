@@ -19,6 +19,10 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
     }
 
     init {
+        initialPos()
+    }
+
+    override fun initialPos() {
         image.xy(26 * 4, 21 * 4+ offset)
     }
 

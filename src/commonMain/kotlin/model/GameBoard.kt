@@ -23,7 +23,8 @@ class GameBoard private constructor(
 
     private var dotObjects: MutableSet<SolidRect> = mutableSetOf()
     private var powerPellets: MutableSet<Image> = mutableSetOf()
-    private var score: Int = 0
+    private var score = 0
+    private var lives = 3
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
@@ -127,7 +128,7 @@ class GameBoard private constructor(
         }
     }
 
-    fun checkPowerPalletCollision(gameBoard: GameBoard): Boolean {
+    fun checkPowerPalletCollision(): Boolean {
         for (pellet in powerPellets) {
             if (pellet.x > pacman.getX()
                 && pellet.x < pacman.getX() + 14
@@ -140,12 +141,29 @@ class GameBoard private constructor(
                 updateScore()
                 println("current score: $score")
 
-                for (g in gameBoard.ghosts)
+                for (g in ghosts)
                     g.frighten()
                 return true
             }
         }
         return false
+    }
+
+    fun checkGhostCollision() {
+        for (ghost in ghosts) {
+            if (ghost.getX() < pacman.getX() + 16
+                && ghost.getX() + 16 > pacman.getX()
+                && ghost.getY() < pacman.getY() + 16
+                && ghost.getY() + 16 > pacman.getY()) {
+                if (Ghost.isOneFrightened) {
+                    ghost.kill()
+                } else {
+                    lives--;
+                    pacman.initialPos()
+                    ghosts.forEach { g -> g.initialPos() }
+                }
+            }
+        }
     }
 
     init {

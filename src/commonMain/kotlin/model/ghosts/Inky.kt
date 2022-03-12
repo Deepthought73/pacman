@@ -17,7 +17,11 @@ class Inky private constructor(animations: Map<Direction, Animation>, game: Stag
     }
 
     init {
-        image.xy(26 * 4, 21 * 4 + offset)
+        initialPos()
+    }
+
+    override fun initialPos() {
+        image.xy(26 * 4, 21 * 4+ offset)
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
