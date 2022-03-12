@@ -11,15 +11,15 @@ class Animation(
     private var state = 0
 
     companion object {
-        suspend fun createDirectoryAnimationMap(entityName: String): Map<Direction, Animation> {
+        suspend fun createDirectoryAnimationMap(
+            entityName: String,
+            animationCount: Int = 2
+        ): Map<Direction, Animation> {
             return buildMap {
                 Direction.values().forEach { directory ->
-                    this[directory] = Animation(
-                        listOf(
-                            resourcesVfs["$entityName/${directory.name.lowercase()}/0.png"].readBitmap(),
-                            resourcesVfs["$entityName/${directory.name.lowercase()}/1.png"].readBitmap()
-                        )
-                    )
+                    this[directory] = Animation((0 until animationCount).map { index ->
+                        resourcesVfs["$entityName/${directory.name.lowercase()}/$index.png"].readBitmap()
+                    })
                 }
             }
         }

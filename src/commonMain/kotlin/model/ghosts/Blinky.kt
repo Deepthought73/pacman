@@ -23,6 +23,8 @@ class Blinky private constructor(animations: Map<Direction, Animation>, game: St
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
         return if (isScattering)
             Pair(224, offset)
+        else if (isDead)
+            return super.getTarget(gameBoard)
         else
             Pair(gameBoard.pacman.getX().roundToInt(), gameBoard.pacman.getY().roundToInt())
     }

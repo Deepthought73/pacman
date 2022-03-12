@@ -23,6 +23,8 @@ class Pinky private constructor(animations: Map<Direction, Animation>, game: Sta
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
         return if (isScattering)
             Pair(0, offset)
+        else if (isDead)
+            return super.getTarget(gameBoard)
         else {
             var x = gameBoard.pacman.getX().roundToInt()
             var y = gameBoard.pacman.getY().roundToInt()

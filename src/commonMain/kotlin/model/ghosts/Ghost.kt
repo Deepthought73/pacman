@@ -24,6 +24,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
     var isFrightened = false
     private var frightenedTimer = 0.0.seconds
+    protected var isDead = false
 
     companion object {
         private val FRIGHTENED_DURATION = 10.0.seconds
@@ -36,6 +37,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
         private lateinit var frightenedAnimations: Animation
         private lateinit var frightenedAnimations2: Animation
+        private lateinit var deadAnimations: Map<Direction, Animation>
 
         fun addListener(game: Stage) {
             game.addUpdater(fun Stage.(dt: TimeSpan) {
@@ -68,6 +70,8 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
                     resourcesVfs["ghosts/afraid/1/1.png"].readBitmap(),
                 )
             )
+
+            deadAnimations = Animation.createDirectoryAnimationMap("ghosts/dead", 1)
         }
     }
 
@@ -78,7 +82,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     fun kill() {
-
+        isDead = true
     }
 
     override fun getSpeed(): Double {
@@ -108,7 +112,9 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     override fun getNextBitmap(): BitmapSlice<Bitmap> {
-        return if (isFrightened) {
+        return if (isDead) {
+            deadAnimations[direction]!!.next().slice()
+        } else if (isFrightened) {
             if (frightenedTimer <= FRIGHTENED_BLINKING_DURATION)
                 frightenedAnimations2.next().slice()
             else
@@ -117,7 +123,9 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
             super.getNextBitmap()
     }
 
-    abstract fun getTarget(gameBoard: GameBoard): Pair<Int, Int>
+    open fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
+        return Pair(4 * 24, 4 * 15)
+    }
 
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
         if (decisionCooldown-- <= 0) {

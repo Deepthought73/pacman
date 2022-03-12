@@ -29,6 +29,8 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
         val distanceToPacman = sqrt((pacmanX - getX()).pow(2) + (pacmanY - getY()).pow(2))
         return if (isScattering || distanceToPacman < 8 * 8)
             Pair(0, 248 + offset)
+        else if (isDead)
+            return super.getTarget(gameBoard)
         else
             Pair(gameBoard.pacman.getX().roundToInt(), gameBoard.pacman.getY().roundToInt())
     }
