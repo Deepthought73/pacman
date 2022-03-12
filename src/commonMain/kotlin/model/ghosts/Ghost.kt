@@ -77,6 +77,10 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         frightenedTimer = FRIGHTENED_DURATION
     }
 
+    fun kill() {
+
+    }
+
     override fun getSpeed(): Double {
         return if (inTunnel()) 0.4
         else if (isFrightened) 0.5
