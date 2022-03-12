@@ -111,7 +111,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         })
     }
 
-    override fun getNextBitmap(): BitmapSlice<Bitmap> {
+    override fun getNextBitmap(gameBoard: GameBoard): BitmapSlice<Bitmap> {
         return if (isDead) {
             deadAnimations[direction]!!.next().slice()
         } else if (isFrightened) {
@@ -120,7 +120,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
             else
                 frightenedAnimations.next().slice()
         } else
-            super.getNextBitmap()
+            super.getNextBitmap(gameBoard)
     }
 
     open fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {

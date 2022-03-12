@@ -5,7 +5,7 @@ import model.Direction
 
 class Animation(
     private val images: List<Bitmap>,
-    private val cyclesPerChange: Int = 9
+    private val cyclesPerChange: Int = 6
 ) {
 
     private var state = 0
@@ -29,6 +29,10 @@ class Animation(
         return images[state++ / cyclesPerChange].apply {
             if (state == images.size * cyclesPerChange) state = 0
         }
+    }
+
+    fun reset() {
+        state = 0
     }
 
 }

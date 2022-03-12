@@ -22,13 +22,23 @@ abstract class Entity(
     open fun addListener(gameBoard: GameBoard) {
         game.addUpdater {
             move(gameBoard)
-            image.bitmap = getNextBitmap()
+            image.bitmap = getNextBitmap(gameBoard)
         }
     }
 
     protected abstract fun getSpeed(): Double
 
-    protected open fun getNextBitmap(): BitmapSlice<Bitmap> {
+    protected open fun getNextBitmap(gameBoard: GameBoard): BitmapSlice<Bitmap> {
+        var counter = 0
+        while (counter < 10 && !hasCollision(gameBoard)) {
+            counter++
+            shift(direction)
+        }
+        if (hasCollision(gameBoard))
+            animations[direction]!!.reset()
+        for (i in 0 until counter)
+            reShift(direction)
+
         return animations[direction]!!.next().slice()
     }
 
