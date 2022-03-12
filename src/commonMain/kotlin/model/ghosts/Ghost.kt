@@ -90,7 +90,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
 
-        game.addUpdater(fun Stage.(_: TimeSpan) {
+        game.addUpdater(fun Stage.(dt: TimeSpan) {
             nextDirection = calculateNextDirection(gameBoard)
 
             if (frightenedTimer > 0.0.seconds)
