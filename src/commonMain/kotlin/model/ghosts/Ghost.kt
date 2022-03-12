@@ -22,22 +22,20 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
     private var decisionCooldown = 0
 
+    var isFrightened = false
+    private var frightenedTimer = 0.0.seconds
+
     companion object {
         private val FRIGHTENED_DURATION = 10.0.seconds
+        private val FRIGHTENED_BLINKING_DURATION = 2.0.seconds
 
-        var isFrightened = false
         var isScattering = true
-
-        private var scatterTimer = TimeSpan(0.0)
+        private var scatterTimer = 0.0.seconds
         private val scatterChanges = mutableListOf(7, 27, 34, 54, 59, 79, 84)
-        private var frightenedTimer = 0.0.seconds
+        var isOneFrightened = false
 
         private lateinit var frightenedAnimations: Animation
-
-        fun frighten() {
-            isFrightened = true
-            frightenedTimer = FRIGHTENED_DURATION
-        }
+        private lateinit var frightenedAnimations2: Animation
 
         fun addListener(game: Stage) {
             game.addUpdater(fun Stage.(dt: TimeSpan) {
@@ -47,11 +45,6 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
                     scatterChanges.remove(scatterTimer.seconds.toInt())
                     isScattering = !isScattering
                 }
-
-                if (frightenedTimer > 0.0.seconds)
-                    frightenedTimer -= dt
-                else
-                    isFrightened = false
             })
         }
 
@@ -62,7 +55,26 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
                     resourcesVfs["ghosts/afraid/0/1.png"].readBitmap()
                 )
             )
+
+            frightenedAnimations2 = Animation(
+                listOf(
+                    resourcesVfs["ghosts/afraid/0/0.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/0/1.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/0/0.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/0/1.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/1/0.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/1/1.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/1/0.png"].readBitmap(),
+                    resourcesVfs["ghosts/afraid/1/1.png"].readBitmap(),
+                )
+            )
         }
+    }
+
+    fun frighten() {
+        isOneFrightened = true
+        isFrightened = true
+        frightenedTimer = FRIGHTENED_DURATION
     }
 
     override fun getSpeed(): Double {
@@ -80,12 +92,23 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
         game.addUpdater(fun Stage.(dt: TimeSpan) {
             nextDirection = calculateNextDirection(gameBoard)
+
+            if (frightenedTimer > 0.0.seconds)
+                frightenedTimer -= dt
+            else {
+                isFrightened = false
+                if (!gameBoard.ghosts.any { it.isFrightened })
+                    isOneFrightened = false
+            }
         })
     }
 
     override fun getNextBitmap(): BitmapSlice<Bitmap> {
         return if (isFrightened) {
-            frightenedAnimations.next().slice()
+            if (frightenedTimer <= FRIGHTENED_BLINKING_DURATION)
+                frightenedAnimations2.next().slice()
+            else
+                frightenedAnimations.next().slice()
         } else
             super.getNextBitmap()
     }

@@ -39,12 +39,12 @@ class Pacman private constructor(
             else if (input.keys.pressing(Key.UP)) nextDirection = UP
             else if (input.keys.pressing(Key.DOWN)) nextDirection = DOWN
             gameBoard.checkDotCollision()
-            gameBoard.checkPowerPalletCollision()
+            gameBoard.checkPowerPalletCollision(gameBoard)
         })
     }
 
     override fun getSpeed(): Double {
-        return if (Ghost.isFrightened) 0.9
+        return if (Ghost.isOneFrightened) 0.9
         else 0.8
     }
 

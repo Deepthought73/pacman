@@ -127,7 +127,7 @@ class GameBoard private constructor(
         }
     }
 
-    fun checkPowerPalletCollision(): Boolean {
+    fun checkPowerPalletCollision(gameBoard: GameBoard): Boolean {
         for (pellet in powerPellets) {
             if (pellet.x > pacman.getX()
                 && pellet.x < pacman.getX() + 14
@@ -140,7 +140,8 @@ class GameBoard private constructor(
                 updateScore()
                 println("current score: $score")
 
-                Ghost.frighten()
+                for (g in gameBoard.ghosts)
+                    g.frighten()
                 return true
             }
         }
