@@ -161,6 +161,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
             else if (image.y <= 26 * 4 + offset) Direction.DOWN
             else direction
         } else if (decisionCooldown-- <= 0) {
+            var oldY = getY()
             val target = getTarget(gameBoard)
             var minDirection = direction
             var minDistance = Double.POSITIVE_INFINITY
@@ -194,6 +195,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
             }
 
             decisionCooldown = 4
+            image.y = oldY
             return minDirection
         } else return nextDirection
     }
