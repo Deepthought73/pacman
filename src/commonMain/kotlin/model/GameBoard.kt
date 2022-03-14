@@ -1,5 +1,7 @@
 package model
 
+import com.soywiz.klock.TimeSpan
+import com.soywiz.klock.seconds
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.Colors
@@ -27,6 +29,7 @@ class GameBoard private constructor(
     private var lives = 3
 
     var killStreet = 0
+    var gameOver = false
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
@@ -167,8 +170,13 @@ class GameBoard private constructor(
                     Entity.killCooldownTimer = Entity.KILL_COOLDOWN_DURATION
                 } else if (!ghost.isDead) {
                     lives--
-                    pacman.initialPos()
-                    ghosts.forEach { g -> g.initialPos() }
+                    if (lives > 0) {
+                        pacman.initialPos()
+                        ghosts.forEach { g -> g.initialPos() }
+                    } else {
+                        Entity.killCooldownTimer = 10.0.seconds
+                        gameOver = true
+                    }
                 }
             }
         }
@@ -185,6 +193,16 @@ class GameBoard private constructor(
             g.addListener(this)
 
         game.addChild(scoreText)
+
+        game.addUpdater(fun Stage.(_: TimeSpan) {
+            if (gameOver) {
+                Entity.killCooldownTimer = 10.0.seconds
+            } else {
+                checkDotCollision()
+                checkPowerPalletCollision()
+                checkGhostCollision()
+            }
+        })
     }
 
 }

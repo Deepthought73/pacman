@@ -18,8 +18,7 @@ class Pacman private constructor(
     private val score400: Bitmap,
     private val score800: Bitmap,
     private val score1600: Bitmap,
-    game: Stage,
-    offset: Int
+    game: Stage
 ) :
     Entity(animations, game) {
 
@@ -38,8 +37,7 @@ class Pacman private constructor(
                 score400,
                 score800,
                 score1600,
-                game,
-                offset
+                game
             )
         }
     }
@@ -80,9 +78,6 @@ class Pacman private constructor(
             else if (input.keys.pressing(Key.RIGHT)) nextDirection = RIGHT
             else if (input.keys.pressing(Key.UP)) nextDirection = UP
             else if (input.keys.pressing(Key.DOWN)) nextDirection = DOWN
-            gameBoard.checkDotCollision()
-            gameBoard.checkPowerPalletCollision()
-            gameBoard.checkGhostCollision()
         })
     }
 
