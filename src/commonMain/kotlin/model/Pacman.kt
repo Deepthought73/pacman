@@ -6,20 +6,28 @@ import com.soywiz.korev.Key
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korge.view.xy
+import com.soywiz.korim.bitmap.Bitmap
+import com.soywiz.korim.bitmap.BitmapSlice
+import com.soywiz.korim.bitmap.slice
 import model.Direction.*
 import model.ghosts.Ghost
 
 class Pacman private constructor(
     animations: Map<Direction, Animation>,
+    private val scoreBitmaps: Map<Int, Bitmap>,
     game: Stage,
     offset: Int
 ) :
     Entity(animations, game) {
 
+    private var showScoreTimer = 0
+    private var showScore = 200
+
     companion object {
-        suspend fun create(game: Stage): Pacman {
+        suspend fun create(game: Stage, scoreBitmaps: Map<Int, Bitmap>): Pacman {
             return Pacman(
                 Animation.createDirectoryAnimationMap("pacman"),
+                scoreBitmaps,
                 game,
                 offset
             )
@@ -32,6 +40,21 @@ class Pacman private constructor(
 
     init {
         initialPos()
+    }
+
+    override fun getNextBitmap(gameBoard: GameBoard): BitmapSlice<Bitmap> {
+        if (showScoreTimer <= 0) {
+            return super.getNextBitmap(gameBoard)
+        } else {
+            println("get bitmap for score: "+showScore)
+            println(scoreBitmaps.keys)
+            return scoreBitmaps[showScore]!!.slice()
+        }
+    }
+
+    fun showScore(score: Int) {
+        showScoreTimer = 3
+        showScore = score
     }
 
     override fun addListener(gameBoard: GameBoard) {

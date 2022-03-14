@@ -7,6 +7,7 @@ import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.font.TtfFont
 import com.soywiz.korim.format.readBitmap
+import com.soywiz.korio.dynamic.KDynamic.Companion.set
 import com.soywiz.korio.file.std.resourcesVfs
 import model.ghosts.*
 
@@ -34,8 +35,18 @@ class GameBoard private constructor(
             Ghost.loadAnimations()
             Ghost.addListener(game)
 
+            var scoreBitmaps = mutableMapOf<Int, Bitmap>()
+            scoreBitmaps[200] = resourcesVfs["points/200.png"].readBitmap()
+            scoreBitmaps[400] = resourcesVfs["points/400.png"].readBitmap()
+            scoreBitmaps[800] = resourcesVfs["points/800.png"].readBitmap()
+            scoreBitmaps[1600] = resourcesVfs["points/1600.png"].readBitmap()
+            println("score bitmap: "+scoreBitmaps.keys)
+
             return GameBoard(
-                Pacman.create(game),
+                Pacman.create(
+                    game,
+                    scoreBitmaps
+                ),
                 listOf(
                     Blinky.create(game, offset),
                     Pinky.create(game, offset),
@@ -149,18 +160,20 @@ class GameBoard private constructor(
 
     fun checkGhostCollision() {
         for (ghost in ghosts) {
-            if (ghost.getX() < pacman.getX() + 16
-                && ghost.getX() + 16 > pacman.getX()
-                && ghost.getY() < pacman.getY() + 16
-                && ghost.getY() + 16 > pacman.getY()) {
+            if (ghost.getX() < pacman.getX() + 4
+                && ghost.getX() + 4 > pacman.getX()
+                && ghost.getY() < pacman.getY() + 4
+                && ghost.getY() + 4 > pacman.getY()) {
                 if (Ghost.isOneFrightened && !ghost.isDead) {
                     ghost.kill()
-                    score += when (killStreet) {
+                    val additionalPoints = when (killStreet) {
                         0 -> 200
                         1 -> 400
                         2 -> 800
                         else -> 1600
                     }
+                    score += additionalPoints
+                    pacman.showScore(additionalPoints)
                     Entity.killCooldownTimer = Entity.KILL_COOLDOWN_DURATION
                 } else if (!ghost.isDead) {
                     lives--
