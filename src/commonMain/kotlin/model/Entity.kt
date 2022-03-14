@@ -31,6 +31,7 @@ abstract class Entity(
     protected abstract fun getSpeed(): Double
 
     protected open fun getNextBitmap(gameBoard: GameBoard): BitmapSlice<Bitmap> {
+        var oldX = getX()
         var counter = 0
         while (counter < 10 && !hasCollision(gameBoard)) {
             counter++
@@ -40,7 +41,7 @@ abstract class Entity(
             animations[direction]!!.reset()
         for (i in 0 until counter)
             reShift(direction)
-
+        image.x = oldX
         return animations[direction]!!.next().slice()
     }
 
