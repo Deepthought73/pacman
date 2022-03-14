@@ -1,5 +1,6 @@
 package model
 
+import com.soywiz.klock.seconds
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.Colors
@@ -152,7 +153,7 @@ class GameBoard private constructor(
                 && ghost.getX() + 16 > pacman.getX()
                 && ghost.getY() < pacman.getY() + 16
                 && ghost.getY() + 16 > pacman.getY()) {
-                if (Ghost.isOneFrightened) {
+                if (Ghost.isOneFrightened && !ghost.isDead) {
                     ghost.kill()
                     score += when (killStreet) {
                         0 -> 200
@@ -160,6 +161,7 @@ class GameBoard private constructor(
                         2 -> 800
                         else -> 1600
                     }
+                    Entity.killCooldownTimer = Entity.KILL_COOLDOWN_DURATION
                 } else if (!ghost.isDead) {
                     lives--
                     pacman.initialPos()

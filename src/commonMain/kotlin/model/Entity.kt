@@ -1,6 +1,8 @@
 package model
 
 import Animation
+import com.soywiz.klock.TimeSpan
+import com.soywiz.klock.seconds
 import com.soywiz.kmem.toIntRound
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
@@ -21,17 +23,25 @@ abstract class Entity(
 
     protected val image = game.image(animations[direction]!!.next())
 
+    companion object {
+        val KILL_COOLDOWN_DURATION = 2.0.seconds
+
+        var killCooldownTimer = 0.0.seconds
+    }
+
     open fun addListener(gameBoard: GameBoard) {
-        game.addUpdater {
+        game.addUpdater(fun Stage.(dt: TimeSpan) {
             move(gameBoard)
             image.bitmap = getNextBitmap(gameBoard)
-        }
+
+            killCooldownTimer -= dt
+        })
     }
 
     protected abstract fun getSpeed(): Double
 
     protected open fun getNextBitmap(gameBoard: GameBoard): BitmapSlice<Bitmap> {
-        var oldX = getX()
+        val oldX = getX()
         var counter = 0
         while (counter < 10 && !hasCollision(gameBoard)) {
             counter++
@@ -54,7 +64,7 @@ abstract class Entity(
     }
 
     private fun move(gameBoard: GameBoard) {
-        if (isPause) {
+        if (isPause || killCooldownTimer > 0.0.seconds) {
             isPause = false
             return
         }
