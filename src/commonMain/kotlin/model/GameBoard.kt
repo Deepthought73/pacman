@@ -1,13 +1,11 @@
 package model
 
-import com.soywiz.klock.seconds
 import com.soywiz.korge.view.*
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.color.Colors
 import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.font.TtfFont
 import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.dynamic.KDynamic.Companion.set
 import com.soywiz.korio.file.std.resourcesVfs
 import model.ghosts.*
 
@@ -20,7 +18,7 @@ class GameBoard private constructor(
     emptyGameBoard: Bitmap,
     dotDistributionBitmap: Bitmap,
     private val powerPellet: Bitmap,
-    private val font: TtfFont
+    font: TtfFont
 ) {
 
     var dotObjects: MutableSet<SolidRect> = mutableSetOf()
@@ -159,7 +157,8 @@ class GameBoard private constructor(
             if (ghost.getX() < pacman.getX() + 4
                 && ghost.getX() + 4 > pacman.getX()
                 && ghost.getY() < pacman.getY() + 4
-                && ghost.getY() + 4 > pacman.getY()) {
+                && ghost.getY() + 4 > pacman.getY()
+            ) {
                 if (Ghost.isOneFrightened && !ghost.isDead) {
                     ghost.kill()
                     val additionalPoints = when (killStreet) {
