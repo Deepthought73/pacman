@@ -81,7 +81,9 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         }
     }
 
-    fun frighten() {
+    fun frighten(gameBoard: GameBoard) {
+        if (!isOneFrightened)
+            gameBoard.killStreet = 0
         isOneFrightened = true
         isFrightened = true
         frightenedTimer = FRIGHTENED_DURATION

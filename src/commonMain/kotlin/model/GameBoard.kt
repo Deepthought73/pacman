@@ -26,6 +26,8 @@ class GameBoard private constructor(
     private var score = 0
     private var lives = 3
 
+    var killStreet = 0
+
     companion object {
         suspend fun create(game: Stage): GameBoard {
             Ghost.loadAnimations()
@@ -67,11 +69,6 @@ class GameBoard private constructor(
             dotDistributionBitmap.getRgba(11 + 8 * col, 11 + 8 * row) == RGBA(255, 183, 174, 255) &&
                     dotDistributionBitmap.getRgba(10 + 8 * col, 10 + 8 * row) != RGBA(255, 183, 174, 255)
         }
-    }
-
-    fun renderText() {
-        val text = Text("1UP    HIGH SCORE", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 0)
-        game.addChild(text)
     }
 
     private var scoreText = Text("00", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 20)
@@ -142,7 +139,7 @@ class GameBoard private constructor(
                 updateScore()
 
                 for (g in ghosts)
-                    g.frighten()
+                    g.frighten(this)
                 return true
             }
         }
@@ -157,8 +154,14 @@ class GameBoard private constructor(
                 && ghost.getY() + 16 > pacman.getY()) {
                 if (Ghost.isOneFrightened) {
                     ghost.kill()
+                    score += when (killStreet) {
+                        0 -> 200
+                        1 -> 400
+                        2 -> 800
+                        else -> 1600
+                    }
                 } else if (!ghost.isDead) {
-                    lives--;
+                    lives--
                     pacman.initialPos()
                     ghosts.forEach { g -> g.initialPos() }
                 }
