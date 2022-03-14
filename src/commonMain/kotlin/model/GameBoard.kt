@@ -182,6 +182,18 @@ class GameBoard private constructor(
         }
     }
 
+    fun checkAllDotsCollected() {
+        if (dotObjects.size == 0) {
+            pacman.initialPos()
+            ghosts.forEach { g -> g.initialPos() }
+            createDotObjects()
+            for (pellet in powerPellets) {
+                game.removeChild(pellet)
+            }
+            createPowerPellets()
+        }
+    }
+
     init {
         createDotObjects()
         createPowerPellets()
@@ -201,6 +213,7 @@ class GameBoard private constructor(
                 checkDotCollision()
                 checkPowerPalletCollision()
                 checkGhostCollision()
+                checkAllDotsCollected()
             }
         })
     }
