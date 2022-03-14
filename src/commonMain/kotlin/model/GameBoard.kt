@@ -157,7 +157,7 @@ class GameBoard private constructor(
                 && ghost.getY() + 16 > pacman.getY()) {
                 if (Ghost.isOneFrightened) {
                     ghost.kill()
-                } else {
+                } else if (!ghost.isDead) {
                     lives--;
                     pacman.initialPos()
                     ghosts.forEach { g -> g.initialPos() }

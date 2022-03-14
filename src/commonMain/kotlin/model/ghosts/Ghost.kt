@@ -6,6 +6,7 @@ import com.soywiz.klock.seconds
 import com.soywiz.korge.view.SolidRect
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
+import com.soywiz.korge.view.xy
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.bitmap.BitmapSlice
 import com.soywiz.korim.bitmap.slice
@@ -26,12 +27,14 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
     var isFrightened = false
     private var frightenedTimer = 0.0.seconds
-    protected var isDead = false
+    private var reviveTimer = 0.0.seconds
+    var isDead = false
     private val frightenedBlinkingAnimation = frightenedAnimations2.clone()
 
     companion object {
         private val FRIGHTENED_DURATION = 10.0.seconds
         private val FRIGHTENED_BLINKING_DURATION = 2.0.seconds
+        private val REVIVAL_DURATION = 3.0.seconds
 
         var isScattering = true
         private var scatterTimer = 0.0.seconds
@@ -86,6 +89,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
 
     fun kill() {
         isDead = true
+        isFrightened = false
     }
 
     override fun getSpeed(): Double {
@@ -107,18 +111,30 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         game.addChild(targetRect)
 
         game.addUpdater(fun Stage.(dt: TimeSpan) {
-            val target = getTarget(gameBoard)
-            targetRect.x = target.first.toDouble()
-            targetRect.y = target.second.toDouble()
+            if (reviveTimer >= 0.0.seconds) {
+                reviveTimer -= dt
+                isPause = true
+            } else if (!isInBox(gameBoard) && image.x in 88.0..120.0 && image.y - offset in 104.0..112.0) {
+                image.xy(26 * 4, 21 * 4 + offset)
+            } else {
+                val target = getTarget(gameBoard)
+                targetRect.x = target.first.toDouble()
+                targetRect.y = target.second.toDouble()
 
-            nextDirection = calculateNextDirection(gameBoard)
+                nextDirection = calculateNextDirection(gameBoard)
 
-            if (frightenedTimer > 0.0.seconds)
-                frightenedTimer -= dt
-            else {
-                isFrightened = false
-                if (!gameBoard.ghosts.any { it.isFrightened })
-                    isOneFrightened = false
+                if (frightenedTimer > 0.0.seconds)
+                    frightenedTimer -= dt
+                else {
+                    isFrightened = false
+                    if (!gameBoard.ghosts.any { it.isFrightened })
+                        isOneFrightened = false
+                }
+
+                if (isDead && image.x <= 26.5 * 4 && image.x >= 25.5 * 4 && image.y <= 21.5 * 4 + offset && image.y >= 20.5 * 4 + offset) {
+                    isDead = false
+                    reviveTimer = REVIVAL_DURATION
+                }
             }
         })
     }
