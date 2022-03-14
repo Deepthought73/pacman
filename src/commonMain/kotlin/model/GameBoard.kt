@@ -35,17 +35,13 @@ class GameBoard private constructor(
             Ghost.loadAnimations()
             Ghost.addListener(game)
 
-            var scoreBitmaps = mutableMapOf<Int, Bitmap>()
-            scoreBitmaps[200] = resourcesVfs["points/200.png"].readBitmap()
-            scoreBitmaps[400] = resourcesVfs["points/400.png"].readBitmap()
-            scoreBitmaps[800] = resourcesVfs["points/800.png"].readBitmap()
-            scoreBitmaps[1600] = resourcesVfs["points/1600.png"].readBitmap()
-            println("score bitmap: "+scoreBitmaps.keys)
-
             return GameBoard(
                 Pacman.create(
                     game,
-                    scoreBitmaps
+                    resourcesVfs["points/200.png"].readBitmap(),
+                    resourcesVfs["points/400.png"].readBitmap(),
+                    resourcesVfs["points/800.png"].readBitmap(),
+                    resourcesVfs["points/1600.png"].readBitmap()
                 ),
                 listOf(
                     Blinky.create(game, offset),

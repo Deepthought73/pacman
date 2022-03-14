@@ -14,20 +14,30 @@ import model.ghosts.Ghost
 
 class Pacman private constructor(
     animations: Map<Direction, Animation>,
-    private val scoreBitmaps: Map<Int, Bitmap>,
+    val score200: Bitmap,
+    val score400: Bitmap,
+    val score800: Bitmap,
+    val score1600: Bitmap,
     game: Stage,
     offset: Int
 ) :
     Entity(animations, game) {
 
-    private var showScoreTimer = 0
+    private var showScoreTimer = 0.0
     private var showScore = 200
 
     companion object {
-        suspend fun create(game: Stage, scoreBitmaps: Map<Int, Bitmap>): Pacman {
+        suspend fun create(game: Stage,
+                           score200: Bitmap,
+                           score400: Bitmap,
+                           score800: Bitmap,
+                           score1600: Bitmap,): Pacman {
             return Pacman(
                 Animation.createDirectoryAnimationMap("pacman"),
-                scoreBitmaps,
+                score200,
+                score400,
+                score800,
+                score1600,
                 game,
                 offset
             )
@@ -46,14 +56,19 @@ class Pacman private constructor(
         if (showScoreTimer <= 0) {
             return super.getNextBitmap(gameBoard)
         } else {
-            println("get bitmap for score: "+showScore)
-            println(scoreBitmaps.keys)
-            return scoreBitmaps[showScore]!!.slice()
+            showScoreTimer -= 0.1
+            return when(showScore) {
+                200 -> score200
+                400 -> score400
+                800 -> score800
+                1600 -> score1600
+                else -> score200
+            }.slice()
         }
     }
 
     fun showScore(score: Int) {
-        showScoreTimer = 3
+        showScoreTimer = 3.0
         showScore = score
     }
 
