@@ -14,6 +14,8 @@ abstract class Entity(
     protected val game: Stage
 ) {
 
+    var isPause = false
+
     var direction = Direction.UP
     protected var nextDirection = Direction.UP
 
@@ -51,6 +53,11 @@ abstract class Entity(
     }
 
     private fun move(gameBoard: GameBoard) {
+        if (isPause) {
+            isPause = false
+            return
+        }
+
         val oldDirection = direction
         direction = nextDirection
         if (oldDirection != direction) {

@@ -3,11 +3,13 @@ package model.ghosts
 import Animation
 import com.soywiz.klock.TimeSpan
 import com.soywiz.klock.seconds
+import com.soywiz.korge.view.SolidRect
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addUpdater
 import com.soywiz.korim.bitmap.Bitmap
 import com.soywiz.korim.bitmap.BitmapSlice
 import com.soywiz.korim.bitmap.slice
+import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.format.readBitmap
 import com.soywiz.korio.file.std.resourcesVfs
 import model.Direction
@@ -25,6 +27,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     var isFrightened = false
     private var frightenedTimer = 0.0.seconds
     protected var isDead = false
+    private val frightenedBlinkingAnimation = frightenedAnimations2.clone()
 
     companion object {
         private val FRIGHTENED_DURATION = 10.0.seconds
@@ -86,7 +89,8 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     override fun getSpeed(): Double {
-        return if (inTunnel()) 0.4
+        return if (isDead) 1.0
+        else if (inTunnel()) 0.4
         else if (isFrightened) 0.5
         else 0.75
     }
@@ -95,10 +99,18 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
         return image.y - offset in 108.0..120.0 && (image.x <= 28.0 || 180.0 <= image.x)
     }
 
+    private val targetRect = SolidRect(5.0, 5.0, RGBA(255, 0, 0))
+
     override fun addListener(gameBoard: GameBoard) {
         super.addListener(gameBoard)
 
+        game.addChild(targetRect)
+
         game.addUpdater(fun Stage.(dt: TimeSpan) {
+            val target = getTarget(gameBoard)
+            targetRect.x = target.first.toDouble()
+            targetRect.y = target.second.toDouble()
+
             nextDirection = calculateNextDirection(gameBoard)
 
             if (frightenedTimer > 0.0.seconds)
@@ -116,7 +128,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
             deadAnimations[direction]!!.next().slice()
         } else if (isFrightened) {
             if (frightenedTimer <= FRIGHTENED_BLINKING_DURATION)
-                frightenedAnimations2.next().slice()
+                frightenedBlinkingAnimation.next().slice()
             else
                 frightenedAnimations.next().slice()
         } else
@@ -124,7 +136,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     open fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
-        return Pair(4 * 24, 4 * 15)
+        return Pair(4 * 26, 4 * 21 + offset)
     }
 
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
@@ -149,7 +161,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
                 }
             ) {
                 shift(dir)
-                val distance = if (isFrightened)
+                val distance = if (isFrightened && !isDead)
                     Random.nextDouble(0.0, 100.0)
                 else
                     sqrt((target.first - image.x).pow(2) + (target.second - image.y).pow(2))

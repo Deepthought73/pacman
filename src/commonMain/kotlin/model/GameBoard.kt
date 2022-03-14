@@ -121,8 +121,8 @@ class GameBoard private constructor(
                 game.removeChild(dot)
                 dotObjects.remove(dot)
                 score += 10
+                pacman.isPause = true
                 updateScore()
-                println("current score: $score")
                 break
             }
         }
@@ -138,8 +138,8 @@ class GameBoard private constructor(
                 game.removeChild(pellet)
                 powerPellets.remove(pellet)
                 score += 50
+                pacman.isPause = true
                 updateScore()
-                println("current score: $score")
 
                 for (g in ghosts)
                     g.frighten()

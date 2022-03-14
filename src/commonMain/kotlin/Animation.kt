@@ -35,4 +35,8 @@ class Animation(
         state = 0
     }
 
+    fun clone(): Animation {
+        return Animation(images, cyclesPerChange)
+    }
+
 }

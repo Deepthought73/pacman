@@ -25,10 +25,10 @@ class Inky private constructor(animations: Map<Direction, Animation>, game: Stag
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
-        return if (isScattering)
-            Pair(224, 248 + offset)
-        else if (isDead)
+        return if (isDead)
             return super.getTarget(gameBoard)
+        else if (isScattering)
+            Pair(224, 248 + offset)
         else {
             var pacmanX = gameBoard.pacman.getX().roundToInt()
             var pacmanY = gameBoard.pacman.getY().roundToInt()

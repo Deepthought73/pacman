@@ -10,7 +10,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class Clyde private constructor(animations: Map<Direction, Animation>, game: Stage): Ghost(animations, game) {
+class Clyde private constructor(animations: Map<Direction, Animation>, game: Stage) : Ghost(animations, game) {
 
     companion object {
         suspend fun create(game: Stage, offset: Int): Clyde {
@@ -23,7 +23,7 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
     }
 
     override fun initialPos() {
-        image.xy(26 * 4, 21 * 4+ offset)
+        image.xy(26 * 4, 21 * 4 + offset)
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
@@ -31,10 +31,10 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
         val pacmanY = gameBoard.pacman.getY()
 
         val distanceToPacman = sqrt((pacmanX - getX()).pow(2) + (pacmanY - getY()).pow(2))
-        return if (isScattering || distanceToPacman < 8 * 8)
-            Pair(0, 248 + offset)
-        else if (isDead)
+        return if (isDead)
             return super.getTarget(gameBoard)
+        else if (isScattering || distanceToPacman < 8 * 8)
+            Pair(0, 248 + offset)
         else
             Pair(gameBoard.pacman.getX().roundToInt(), gameBoard.pacman.getY().roundToInt())
     }
