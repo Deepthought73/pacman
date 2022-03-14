@@ -21,7 +21,11 @@ class Inky private constructor(animations: Map<Direction, Animation>, game: Stag
     }
 
     override fun initialPos() {
-        image.xy(26 * 4, 21 * 4+ offset)
+        image.xy(22 * 4, 28 * 4 + offset)
+    }
+
+    override fun isInBox(gameBoard: GameBoard): Boolean {
+        return gameBoard.dotObjects.size / 240.0 >= 0.7
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {

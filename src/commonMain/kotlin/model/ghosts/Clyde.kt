@@ -23,7 +23,11 @@ class Clyde private constructor(animations: Map<Direction, Animation>, game: Sta
     }
 
     override fun initialPos() {
-        image.xy(26 * 4, 21 * 4 + offset)
+        image.xy(30 * 4, 28 * 4 + offset)
+    }
+
+    override fun isInBox(gameBoard: GameBoard): Boolean {
+        return gameBoard.dotObjects.size / 240.0 >= 0.33
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {

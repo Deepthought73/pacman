@@ -21,7 +21,7 @@ class GameBoard private constructor(
     private val font: TtfFont
 ) {
 
-    private var dotObjects: MutableSet<SolidRect> = mutableSetOf()
+    var dotObjects: MutableSet<SolidRect> = mutableSetOf()
     private var powerPellets: MutableSet<Image> = mutableSetOf()
     private var score = 0
     private var lives = 3
@@ -70,7 +70,7 @@ class GameBoard private constructor(
     }
 
     fun renderText() {
-        var text = Text("1UP    HIGH SCORE", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 0)
+        val text = Text("1UP    HIGH SCORE", textSize = 11.0, color = Colors.WHITE, font = font).xy(20, 0)
         game.addChild(text)
     }
 

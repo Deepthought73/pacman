@@ -140,7 +140,11 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     private fun calculateNextDirection(gameBoard: GameBoard): Direction {
-        if (decisionCooldown-- <= 0) {
+        if (isInBox(gameBoard)) {
+            return if (image.y >= 28 * 4 + offset) Direction.UP
+            else if (image.y <= 26 * 4 + offset) Direction.DOWN
+            else direction
+        } else if (decisionCooldown-- <= 0) {
             val target = getTarget(gameBoard)
             var minDirection = direction
             var minDistance = Double.POSITIVE_INFINITY
@@ -179,5 +183,7 @@ abstract class Ghost(animations: Map<Direction, Animation>, game: Stage) : Entit
     }
 
     abstract fun initialPos()
+
+    abstract fun isInBox(gameBoard: GameBoard): Boolean
 
 }

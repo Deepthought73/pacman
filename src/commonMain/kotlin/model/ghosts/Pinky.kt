@@ -21,7 +21,11 @@ class Pinky private constructor(animations: Map<Direction, Animation>, game: Sta
     }
 
     override fun initialPos() {
-        image.xy(26 * 4, 21 * 4+ offset)
+        image.xy(26 * 4, 26 * 4 + offset)
+    }
+
+    override fun isInBox(gameBoard: GameBoard): Boolean {
+        return false
     }
 
     override fun getTarget(gameBoard: GameBoard): Pair<Int, Int> {
