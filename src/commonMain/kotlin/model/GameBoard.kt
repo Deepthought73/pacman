@@ -161,7 +161,7 @@ class GameBoard private constructor(
             ) {
                 if (Ghost.isOneFrightened && !ghost.isDead) {
                     ghost.kill()
-                    val additionalPoints = 200*(1 shl killStreet)
+                    val additionalPoints = 200*(1 shl killStreet++)
                     score += additionalPoints
                     pacman.showScore(additionalPoints)
                     Entity.killCooldownTimer = Entity.KILL_COOLDOWN_DURATION
