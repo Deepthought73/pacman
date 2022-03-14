@@ -14,10 +14,10 @@ import model.ghosts.Ghost
 
 class Pacman private constructor(
     animations: Map<Direction, Animation>,
-    val score200: Bitmap,
-    val score400: Bitmap,
-    val score800: Bitmap,
-    val score1600: Bitmap,
+    private val score200: Bitmap,
+    private val score400: Bitmap,
+    private val score800: Bitmap,
+    private val score1600: Bitmap,
     game: Stage,
     offset: Int
 ) :
@@ -53,11 +53,11 @@ class Pacman private constructor(
     }
 
     override fun getNextBitmap(gameBoard: GameBoard): BitmapSlice<Bitmap> {
-        if (showScoreTimer <= 0) {
-            return super.getNextBitmap(gameBoard)
+        return if (showScoreTimer <= 0) {
+            super.getNextBitmap(gameBoard)
         } else {
             showScoreTimer -= 0.1
-            return when(showScore) {
+            when(showScore) {
                 200 -> score200
                 400 -> score400
                 800 -> score800
