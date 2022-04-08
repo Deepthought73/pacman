@@ -29,7 +29,7 @@ class GameBoard private constructor(
     private var lives = 3
 
     var killStreet = 0
-    var gameOver = false
+    private var gameOver = false
 
     companion object {
         suspend fun create(game: Stage): GameBoard {
@@ -117,7 +117,7 @@ class GameBoard private constructor(
         return false
     }
 
-    fun checkDotCollision() {
+    private fun checkDotCollision() {
         for (dot in dotObjects) {
             if (dot.x > pacman.getX()
                 && dot.x < pacman.getX() + 14
@@ -134,7 +134,7 @@ class GameBoard private constructor(
         }
     }
 
-    fun checkPowerPalletCollision(): Boolean {
+    private fun checkPowerPalletCollision(): Boolean {
         for (pellet in powerPellets) {
             if (pellet.x > pacman.getX()
                 && pellet.x < pacman.getX() + 14
@@ -155,7 +155,7 @@ class GameBoard private constructor(
         return false
     }
 
-    fun checkGhostCollision() {
+    private fun checkGhostCollision() {
         for (ghost in ghosts) {
             if (ghost.getX() < pacman.getX() + 4
                 && ghost.getX() + 4 > pacman.getX()
@@ -182,7 +182,7 @@ class GameBoard private constructor(
         }
     }
 
-    fun checkAllDotsCollected() {
+    private fun checkAllDotsCollected() {
         if (dotObjects.size == 0) {
             pacman.initialPos()
             ghosts.forEach { g -> g.initialPos() }
