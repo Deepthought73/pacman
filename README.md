@@ -2,6 +2,6 @@
 
 A simple Pacman game with original path finding algorithm and ghost behaviour.
 
-![grafik](https://user-images.githubusercontent.com/94146136/229313348-c2b99068-b1c6-4b35-b9a4-00437c777903.png)
+![pacman](https://user-images.githubusercontent.com/94146136/229313461-0b0b231e-0004-4c2b-9d47-84712198725b.png)
 
 Run with: `./gradlew runJvm` or select runJvm in IntelliJ
